@@ -12,8 +12,6 @@ function ProductList({ categoryName, numProducts = 4 }) {
         const fetchProducts = async () => {
         try {
             const response = await axios.get(`http://localhost:5050/products?category=${categoryName}`); // Fetch all products
-            console.log(`http://localhost:5050/products?category=${categoryName}`);
-            
             setProducts(response.data.slice(0, numProducts));
         } catch (err) {
             setError(err);

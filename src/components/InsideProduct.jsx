@@ -256,6 +256,11 @@ function ProductDetail() {
                 </div>
             </div>
 
+            {/* 4 Product showing */}
+            <div className="mx-5 md:mx-20">
+        
+            </div>
+
 
             {/* Accordion */}
             <div className="px-15 my-10">
