@@ -1,5 +1,5 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createHashRouter, RouterProvider } from "react-router-dom"
 import RootLayout from "./pages/RootLayout"
 import Home from "./pages/Home"
 import NewArrivals from './pages/NewArriavals'
@@ -16,7 +16,7 @@ import ProductDetail from './components/InsideProduct'
 
 
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {path: '', element: <RootLayout />, children: [
     { path: '/', element: <Home /> },
     { path: '/new-arrivals', element: <NewArrivals /> },
