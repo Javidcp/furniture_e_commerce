@@ -10,7 +10,6 @@
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "homepage": "https://javidcp.github.io/furniture_e_commerce"
-    
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
@@ -24,6 +23,7 @@
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
+    "react-razorpay": "^3.0.1",
     "react-router-dom": "^7.1.5",
     "swiper": "^11.2.4",
     "tailwindcss": "^4.0.6"

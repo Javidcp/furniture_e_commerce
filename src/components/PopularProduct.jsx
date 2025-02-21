@@ -30,7 +30,7 @@ function ProductList({ categoryName, numProducts = 4 }) {
     
 
     return (
-        <section className='max-w-7xl mx-2 md:mx-20 px-4 my-10'>
+        <section className='max-w-7xl mx-2 md:mx-20 px-4 my-10' id='popular-product'>
             <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-6">
                 {products.map((product) => (
                     <Link to={`/category/${product.category}/product/${product.id}`} key={product.id} className="bg-white shadow-md rounded-md overflow-hidden transform transition duration-300 hover:scale-105 relative flex flex-col">
@@ -39,8 +39,8 @@ function ProductList({ categoryName, numProducts = 4 }) {
                         <div className="p-4">
                             <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
                             <div className="flex items-center relative">
-                                <p className="text-black mt-2">₹ {product.price}</p>
-                                <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice}</p>
+                                <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
+                                <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
                                 <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off  }% off</p>
                             </div>
                         </div>

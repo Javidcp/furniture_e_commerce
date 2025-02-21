@@ -46,8 +46,8 @@ const Sofa = () => {
                                 <div className="p-4">
                                     <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
                                     <div className="flex relative">
-                                        <p className="text-black mt-2">₹ {product.price}</p>
-                                        <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice}</p>
+                                        <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
+                                        <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
                                         <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off}% off</p>
                                     </div>
                                         <button className="absolute top-1.5 right-2 px-2 py-2 rounded-full bg-gray-100 opacity-85">

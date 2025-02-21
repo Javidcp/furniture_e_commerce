@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { IoMdArrowDropup , IoMdArrowDropdown } from "react-icons/io";
 
 
-const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
+const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen  }) => {
 
 
     return (
@@ -19,7 +19,7 @@ const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
                 </div>
                 <nav className="mt-12">
                     <ul className="flex flex-col space-y-4 text-xl ">
-                        <li><Link to='/'>Home</Link></li>
+                        <Link to='/'><li className="text-red-500 font-semibold">HOME</li></Link>
                         <div className="relative inline-block"  onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
                             <button onClick={() => setIsOpen(!isOpen)} className="cursor-pointer flex items-center justify-between gap-2 px-0 py-2">
                                 SHOP <span>{isOpen ? <IoMdArrowDropup  size={15} /> : <IoMdArrowDropdown size={15} />}</span>
@@ -36,9 +36,14 @@ const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
                                 </ul>
                             )}
                         </div>
-                        <Link to='/newarrivals'><li>NEW ARRIVALS</li></Link>
-                        <Link to='/bestseller'><li>BEST SELLERS</li></Link>
-                        <Link to='/offers'><li>OFFER & DISCOUNT</li></Link>
+                        <Link to='/sofa'><li className="uppercase">Sofa</li></Link>
+                        <Link to='/bed'><li className="uppercase">Bed</li></Link>
+                        <Link to='/wardrobe'><li className="uppercase">Wardrobe</li></Link>
+                        <Link to='/chair'><li className="uppercase">Chair</li></Link>
+                        <Link to='/table'><li className="uppercase">Table</li></Link>
+                        <Link to='/table'><li className="uppercase">cabinets</li></Link>
+                        <Link to='/table'><li className="uppercase">Home decors</li></Link>
+                        <Link to='/table'><li className="uppercase">cushions</li></Link>
                     </ul>
                 </nav>
             </div>

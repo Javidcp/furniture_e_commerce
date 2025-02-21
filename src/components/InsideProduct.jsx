@@ -1,17 +1,20 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { IoCartOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
+// Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
+
+
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import van from '../assets/van.svg'
 import warranty from '../assets/warranty.svg'
 import installation from '../assets/installation.svg'
-
+import { CartContext } from "./cart/CartContext";
 
 
 
@@ -26,6 +29,8 @@ function ProductDetail() {
     const [pincodeError, setPincodeError] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [openIndex, setOpenIndex] = useState(null);
+    const navigate = useNavigate()
+    const { addToCart } = useContext(CartContext);
 
     const toggleAccordion = (index) => {
         setOpenIndex(openIndex === index ? null : index);
@@ -35,7 +40,6 @@ function ProductDetail() {
         { title: "How is the foam density? Is it hard/soft to sit on?", content: `The foam density is perfect for sitting. The ${product.category} is neither too hard nor too soft.` },
         { title: "Is assembling or carpentry work required after delivery?", content: `These ${product.category} will come completely assembled. Only the legs are DIY.` },
         { title: "Are all the cushions removable?", content: `No, the cushions of this ${product.category} aren’t removable` },
-        { title: `Can we customize the ${product.category} according to size? I'm looking for a 5 feet 3 seater ${product.category}.`, content: `No, currently we do not offer size customization for our ${product.category}s.` },
         { title: "Does it heat up the body if we sit for a long duration?", content: `No, the ${product.category} does not heat up even if you lounge all day long!` },
     ];
 
@@ -85,6 +89,35 @@ function ProductDetail() {
     
         setChecking(false);
     };
+
+    // 4 product showing related
+    const [relatedProducts, setRelatedProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchRelatedProducts = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5050/products?category=${product.category}`);
+                const filteredProducts = response.data.filter((p) => p.id !== product.id).slice(0, 4);
+                setRelatedProducts(filteredProducts);
+            } catch (err) {
+                console.error("Error fetching related products:", err);
+            }
+        };
+
+        if (product.category) {
+            fetchRelatedProducts();
+        }
+    }, [product.category, product.id]);
+
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [id]); // Scroll to top when `id` changes
+
+
+
+
+
     
 
     if (loading) return <div className="text-center text-xl">Loading product...</div>;
@@ -99,7 +132,11 @@ function ProductDetail() {
         <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-10 mt-20 mb-10">
             {/* Left - Product Images */}
             <div className="w-full md:w-2/5">
-                <Swiper navigation={true} modules={[Navigation]} className="mySwiper">
+                <Swiper navigation={true} 
+                        modules={[Navigation]} 
+                        className="relative mySwiper">
+                
+
                     {productImages.length > 0 ? (
                         productImages.map((img, index) => (
                             <SwiperSlide key={index}>
@@ -117,19 +154,19 @@ function ProductDetail() {
             {/* Right - Product Info */}
             <div className="w-full md:w-3/5">
                 <h2 className="text-3xl font-bold">{product.name}</h2>
-                <p className="text-gray-600 mt-1">{product.description || "No description available."}</p>
+                
                 <span className="flex text-sm border max-w-[95px] px-2 py-1 rounded border-gray-400 text-gray-500 relative">{product.ratingstar} <FaStar className="mt-1 ml-1 mr-3 text-amber-300" /> <span className="absolute left-[50%] right-[50%] top-0.5"> | </span> {product.rating}</span>
 
                 {/* Price Details */}
                 <div className="mt-1.5 mb-1.5">
-                    <p className="text-2xl font-semibold text-black">₹ {product.price}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
+                    <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
                     
                     <p className="text-green-600 font-medium">{product.off}% off</p>
                 </div>
 
                 {/* Quatity */}
                 
-                <div className="border inline px-2 py-1.5 border-gray-300 rounded-xs">
+                <div className="border inline px-2 py-1.5 border-gray-300 rounded">
                     <label htmlFor="quantity">QTY </label>
                     <select id="quantity" className="focus:outline-none" value={quantity} onChange={handleQuantityChange}>
                         {[...Array(10).keys()].map((num) => (
@@ -172,7 +209,7 @@ function ProductDetail() {
 
 
                 {/* Add to Cart Button */}
-                <button className="w-full mt-6 bg-red-600 text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
+                <button onClick={() => addToCart(product, quantity)} className="w-full mt-6 bg-red-600 text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
                     <IoCartOutline className="text-2xl" />
                     Add To Cart
                 </button>
@@ -256,10 +293,39 @@ function ProductDetail() {
                 </div>
             </div>
 
-            {/* 4 Product showing */}
-            <div className="mx-5 md:mx-20">
-        
+            {/* Related Products Section */}
+            <div className="mx-5 md:mx-20 mt-10">
+                <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[50%] mt-1 border-red-500 rounded-2xl" /></h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                    {relatedProducts.length > 0 ? (
+                        relatedProducts.map((item) => (
+                            <div key={item.id} className="shadow-md rounded-md overflow-hidden relative">
+                                <img src={item.image} alt={item.name} className="w-full h-48 object-cover transform transition duration-300 hover:scale-105" />
+                                <div className="p-4">
+                                <h5 className="text-lg font-semibold text-black truncate">{item.name}</h5>
+                                <div className="flex relative">
+                                        <p className="text-black mt-2">₹ {item.price.toLocaleString("en-IN")}</p>
+                                        <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {item.oldprice.toLocaleString("en-IN")}</p>
+                                        <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{item.off}% off</p>
+                                    </div>
+                                        <button onClick={() => addToCart(product, quantity)} className="absolute top-1.5 right-2 px-2 py-2 rounded-full bg-gray-100 opacity-85">
+                                            <IoCartOutline className="text-black transition duration-300 text-xl" />
+                                        </button>
+                                <button
+                                    onClick={() => navigate(`/category/${product.category}/product/${item.id}`)}
+                                    className="mt-3 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
+                                >
+                                    View Details
+                                </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-500">No related products found.</p>
+                    )}
+                </div>
             </div>
+
 
 
             {/* Accordion */}

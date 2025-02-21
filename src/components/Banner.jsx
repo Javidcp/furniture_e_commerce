@@ -1,6 +1,13 @@
 import Banner from "../assets/Home-banner.jpg"
 
 
+const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+    }
+};
+
 const HeroBanner = () => {
     return (
         <div className="lg:pt-15 pt-12">
@@ -15,7 +22,7 @@ const HeroBanner = () => {
                             </span>
                         </h1>
                         <p className='text-lg md:text-xl mb-6'>on order of ₹5499 and more</p>
-                        <button className='bg-red-500 hover:bg-red-600 cursor-pointer text-white font-semibold py-2 px-4 md:py-3 md:px-6 rounded-lg transition-all duration-300'>
+                        <button onClick={() => scrollToSection("popular-product")} className='bg-red-500 hover:bg-red-600 cursor-pointer text-white font-semibold py-2 px-4 md:py-3 md:px-6 rounded-lg transition-all duration-300'>
                             Shop Now
                         </button>
                     </div>
