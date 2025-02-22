@@ -2,7 +2,7 @@ import contact from '../assets/contact.jpg'
 
 const Contact = () => {
     return (
-        <div className="mt-20">
+        <div className="mt-20 mx-5">
             <div className="text-center text-2xl pt-10">
                 <h2 className="uppercase font-light text-gray-400 text-2xl" style={{fontFamily : 'sans-serif'}}>Contact <span className="text-black">us</span></h2>
             </div>

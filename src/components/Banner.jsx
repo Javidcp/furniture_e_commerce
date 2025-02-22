@@ -21,7 +21,7 @@ const HeroBanner = () => {
                                 <span className="relative text-white dark:text-white">25% OFF</span>
                             </span>
                         </h1>
-                        <p className='text-lg md:text-xl mb-6'>on order of ₹5499 and more</p>
+                        <p className='text-lg md:text-xl mb-6'>on order of ₹15,499 and more</p>
                         <button onClick={() => scrollToSection("popular-product")} className='bg-red-500 hover:bg-red-600 cursor-pointer text-white font-semibold py-2 px-4 md:py-3 md:px-6 rounded-lg transition-all duration-300'>
                             Shop Now
                         </button>

@@ -73,7 +73,7 @@ const Login = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='container w-full bg-red-500'>
             <div className="log-box flex flex-col m-auto pb-[30px] mt-[100px] max-w-[600px] bg-white">
                 <div className="header flex flex-col items-center gap-3 w-[100%] mt-[20px]">
                     <div className="text text-red-500 text-3xl font-semibold">{action}</div>

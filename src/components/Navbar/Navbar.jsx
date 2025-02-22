@@ -38,22 +38,22 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-5 hidden lg:block">
                     <nav>
-                        <ul className="flex items-center text-xs font-medium gap-4">
+                        <ul className="flex items-center text-sm font-medium gap-5">
                             <Link to='/'><li className="text-red-500 font-semibold">HOME</li></Link>
                             <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-                                <button className="cursor-pointer flex items-center justify-between gap-2 px-0 py-2">
-                                    SHOP <span>{isOpen ? <IoMdArrowDropup size={15} /> : <IoMdArrowDropdown size={15} />}</span>
+                                <button className="cursor-pointer flex uppercase items-center justify-between gap-1 px-0 py-2">
+                                    collections<span>{isOpen ? <IoMdArrowDropup size={15} /> : <IoMdArrowDropdown size={15} />}</span>
                                 </button>
                                 {isOpen && (
                                     <ul className="absolute left-0 w-40 bg-white" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-                                        <Link to='/sofa'><li className="uppercase py-2 px-3 hover:bg-gray-100">Sofa</li></Link>
-                                        <Link to='/bed'><li className="uppercase py-2 px-3 hover:bg-gray-100">Bed</li></Link>
-                                        <Link to='/wardrobe'><li className="uppercase py-2 px-3 hover:bg-gray-100">Wardrobe</li></Link>
-                                        <Link to='/chair'><li className="uppercase py-2 px-3 hover:bg-gray-100">Chair</li></Link>
-                                        <Link to='/table'><li className="uppercase py-2 px-3 hover:bg-gray-100">Table</li></Link>
-                                        <Link to='/cabinets'><li className="uppercase py-2 px-3 hover:bg-gray-100">Cabinet</li></Link>
-                                        <Link to='/homedecors'><li className="uppercase py-2 px-3 hover:bg-gray-100">Home Decors</li></Link>
-                                        <Link to='/cushions'><li className="uppercase py-2 px-3 hover:bg-gray-100">Cushion</li></Link>
+                                        <Link to='/sofa'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Sofa</li></Link>
+                                        <Link to='/bed'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Bed</li></Link>
+                                        <Link to='/wardrobe'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Wardrobe</li></Link>
+                                        <Link to='/chair'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Chair</li></Link>
+                                        <Link to='/table'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Table</li></Link>
+                                        <Link to='/cabinets'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Cabinet</li></Link>
+                                        <Link to='/homedecors'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Home Decors</li></Link>
+                                        <Link to='/cushions'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Cushion</li></Link>
                                     </ul>
                                 )}
                             </div>
@@ -69,12 +69,12 @@ const Navbar = () => {
                     {/* Conditional Rendering for Login/User Dropdown */}
                     {!isLoggedIn ? (
                         <Link to='/login'>
-                            <button className="cursor-pointer px-4 border border-red-500 py-2 rounded-3xl text-red-500 hover:bg-red-500 hover:text-white">
+                            <button className="cursor-pointer hidden md:block px-4 border border-red-500 py-2 rounded-3xl text-red-500 hover:bg-red-500 hover:text-white">
                                 Login
                             </button>
                         </Link>
                     ) : (
-                        <div className="relative">
+                        <div className="relative hidden md:block">
                             {/* User Icon/Button */}
                             <button
                                 className="flex items-center gap-2 px-3 py-2 border rounded-3xl border-gray-300 hover:bg-gray-200"
