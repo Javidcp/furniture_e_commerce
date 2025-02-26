@@ -46,7 +46,7 @@ const Dashboard = () => {
     }, [user, navigate]);
 
     // Sort users by most recent registration/login
-    const recentUsers = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 8);
+    const recentUsers = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
     
     // Sort orders by most recent date
     const recentOrders = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
@@ -61,19 +61,19 @@ const Dashboard = () => {
 
             {/* Dashboard Summary */}
             <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="px-4 py-8 bg-green-500 rounded">
+                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #80F841, #38B789)"}}>
                     <h3 className="text-lg font-semibold">Total Users</h3>
                     <p className="text-2xl">{users.length}</p>
                 </div>
-                <div className="px-4 py-8 bg-purple-500 rounded">
+                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #D92FDA, #E7B2FF)"}}>
                     <h3 className="text-lg font-semibold">Total Orders</h3>
                     <p className="text-2xl">{orders.length}</p>
                 </div>
-                <div className="px-4 py-8 bg-blue-500 rounded">
+                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #05B5C6, #412FFF)"}}>
                     <h3 className="text-lg font-semibold">Total Products</h3>
                     <p className="text-2xl">{products.length}</p>
                 </div>
-                <div className="px-4 py-8 bg-orange-400 rounded">
+                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #F0F42D, #FEAF2C)"}}>
                     <h3 className="text-lg font-semibold">Total Revenue</h3>
                     <p className="text-2xl">₹{totalRevenue.toFixed(2)}</p>
                 </div>
@@ -117,7 +117,7 @@ const Dashboard = () => {
                         <tr key={index} className="border-b border-gray-700 text-center">
                             <td className="p-2">{order.orderId}</td>
                             <td className="p-2">{order.name}</td>
-                            <td className="p-2">₹{order.totalAmount}</td>
+                            <td className="p-2">₹{order.totalAmount.toLocaleString("en-IN")}</td>
                             <td className="p-2">{new Date(order.date).toLocaleDateString()}</td>
                             <td className={`p-2 font-semibold ${order.status === "Processing" ? "text-yellow-600" : order.status === "Failed" ? "text-red-600" : "text-green-600"}`}>
                                 {order.status}
@@ -133,7 +133,7 @@ const Dashboard = () => {
                     <h3 className="text-xl font-bold text-yellow-600 my-2">Pending Orders</h3>
                     <ul className="bg-yellow-100 text-black  p-3 rounded">
                         {pendingOrders.length > 0 ? pendingOrders.map((order, index) => (
-                            <li key={index} className="border-b p-2 text-sm"><span className="uppercase">Order  </span>:   #{order.orderId} - ₹{order.totalAmount}</li>
+                            <li key={index} className="border-b p-2 text-sm"><span className="uppercase">Order  </span>:   #{order.orderId} - ₹{order.totalAmount.toLocaleString("en-IN")}</li>
                         )) : <p className="p-2">No pending orders</p>}
                     </ul>
                 </div>
@@ -141,7 +141,7 @@ const Dashboard = () => {
                     <h3 className="text-xl font-bold text-red-600 my-2">Failed Transactions</h3>
                     <ul className="bg-red-100 text-black p-3 rounded">
                         {failedOrders.length > 0 ? failedOrders.map((order, index) => (
-                            <li key={index} className="border-b p-2">Order #{order.orderId} - ₹{order.totalAmount}</li>
+                            <li key={index} className="border-b p-2">Order #{order.orderId} - ₹{order.totalAmount.toLocaleString("en-IN")}</li>
                         )) : <p className="p-2">No failed transactions</p>}
                     </ul>
                 </div>

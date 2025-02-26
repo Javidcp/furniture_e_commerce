@@ -4,7 +4,7 @@ const Sidebar = () => {
     const location = useLocation(); // Get current path
 
     return (
-        <div className="w-64 h-screen bg-gray-800 text-white p-5 fixed">
+        <div className="w-60 h-screen bg-gray-800 text-white p-5 fixed">
             <div className='text-2xl font-extrabold mt-5 mb-10'>HOME<span className="text-red-500">HAVEN</span></div>
             <ul>
                 <li className="mb-3">

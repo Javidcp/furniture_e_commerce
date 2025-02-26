@@ -6,7 +6,6 @@ const AdminPanel = () => {
 
     return (
         <div className="flex bg-gray-900">
-            {/* Sidebar */}
             <Sidebar />
 
             <div className=" p-6 flex-1  text-white">

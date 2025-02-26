@@ -16,7 +16,6 @@ import Cabinets from './pages/shop/Cabinets'
 import HomeDecor from './pages/shop/HomeDecor'
 import Cushion from './pages/shop/Cushion'
 import Payment from './components/Payment'
-// import Order from './components/Order'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import OrderHistory from './components/OrderHistory'
@@ -29,6 +28,7 @@ import Users from './components/Admin/Users.jsx'
 import Products from './components/Admin/Products.jsx'
 import Orders from './components/Admin/Order.jsx'
 import Dashboard from './components/Admin/Dashboard.jsx'
+import UserDetails from './components/Admin/UserDetails.jsx'
 
 
 
@@ -47,7 +47,6 @@ const router = createHashRouter([
     { path: '/cart', element: <Cart /> },
     { path: '/login', element: <Login /> },
     { path: '/payment', element: <Payment /> },
-    // { path: '/order', element: <Order /> },
     { path: '/orderhistory', element: <OrderHistory /> },
     { path: '/about', element: <About /> },
     { path: '/contact', element: <Contact /> },
@@ -57,7 +56,8 @@ const router = createHashRouter([
       { path: '', element: <Dashboard /> },
       { path: 'users', element: <Users /> },
       { path: 'orders', element: <Orders /> },
-      { path: 'products', element: <Products /> }
+      { path: 'products', element: <Products /> },
+      { path: 'users/:id', element: <UserDetails /> }
   ] }
 ])
 
