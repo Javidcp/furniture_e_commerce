@@ -1,25 +1,25 @@
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
-import { useEffect, useState } from "react";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Authentication/AuthContext";
 
-const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
-    const [userName, setUserName] = useState(null);
+const Responsive = ({ showMenu, setShowMenu }) => {
+    const authContext = useContext(AuthContext);
     const navigate = useNavigate();
+    const [showDropdown, setShowDropdown] = useState(false);
 
-    useEffect(() => {
-        const storedUser = localStorage.getItem("userName");
-        if (storedUser) {
-            setUserName(storedUser);
-        }
-    }, []);
+    if (!authContext) {
+        console.error("AuthContext is not available. Make sure AuthProvider is wrapping your application.");
+        return null;
+    }
+
+    const { user, logout } = authContext;
 
     const handleLogout = () => {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("userName");
-        setUserName(null);
-        navigate("/login");
-        window.location.reload();
+        logout();
+        navigate("/");
+        setShowMenu(false);
     };
 
     return (
@@ -30,17 +30,19 @@ const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
                 {/* User Info */}
                 <div className="flex items-center justify-between gap-3 pb-2 border-b-1">
                     <div className="flex items-center gap-3">
-                        <FaUserCircle size={50} />
+                        <FaUserCircle size={50} className="text-red-500" />
                         <div>
-                            <h1>Hello {userName ? userName : "Guest"}</h1>
-                            {userName ? (
-                                <h1 className="text-sm text-slate-500">Premium User</h1>
-                            ) : (
+                            <h1>Hello {user ? user.name : "Guest"}</h1>
+                            {!user ? (
                                 <Link to="/login" className="text-sm text-red-500">Login</Link>
+                            ) : (
+                                <button onClick={() => setShowDropdown(!showDropdown)} className="text-sm text-gray-500 flex items-center gap-1">
+                                    Account <IoMdArrowDropdown />
+                                </button>
                             )}
                         </div>
                     </div>
-                    {userName && (
+                    {user && (
                         <button onClick={handleLogout} className="text-red-500 text-sm cursor-pointer">
                             Logout
                         </button>
@@ -48,21 +50,21 @@ const Responsive = ({ showMenu, setShowMenu, isOpen, setIsOpen }) => {
                 </div>
 
                 {/* Navigation */}
-                <nav className="mt-12">
-                    <ul className="flex flex-col space-y-4 text-xl">
+                <nav className="mt-10">
+                    <ul className="flex flex-col space-y-2 text-sm">
                         <Link to="/"><li className="text-red-500 font-semibold">HOME</li></Link>
-                        <Link to='/sofa'><li className="uppercase py-1 hover:bg-gray-100">Sofa</li></Link>
-                        <Link to='/bed'><li className="uppercase py-1 hover:bg-gray-100">Bed</li></Link>
-                        <Link to='/wardrobe'><li className="uppercase py-1 hover:bg-gray-100">Wardrobe</li></Link>
-                        <Link to='/chair'><li className="uppercase py-1 hover:bg-gray-100">Chair</li></Link>
-                        <Link to='/table'><li className="uppercase py-1 hover:bg-gray-100">Table</li></Link>
-                        <Link to='/cabinets'><li className="uppercase py-1 hover:bg-gray-100">Cabinet</li></Link>
-                        <Link to='/homedecors'><li className="uppercase py-1 hover:bg-gray-100">Home Decors</li></Link>
-                        <Link to='/cushions'><li className="uppercase py-1 hover:bg-gray-100">Cushion</li></Link>
-                        <Link to='/about' className="uppercase hover:text-red-500">About</Link>
-                        <Link to='/contact' className="uppercase hover:text-red-500">Contact</Link>
-                        {/* Orders Page - Only Visible When Logged In */}
-                        {userName && (
+                        <Link to="/about"><li className="uppercase hover:text-red-500">About</li></Link>
+                        <Link to="/contact"><li className="uppercase hover:text-red-500">Contact</li></Link>
+                        <Link to="/sofa"><li className="uppercase hover:bg-gray-100">Sofa</li></Link>
+                        <Link to="/bed"><li className="uppercase hover:bg-gray-100">Bed</li></Link>
+                        <Link to="/wardrobe"><li className="uppercase hover:bg-gray-100">Wardrobe</li></Link>
+                        <Link to="/chair"><li className="uppercase hover:bg-gray-100">Chair</li></Link>
+                        <Link to="/table"><li className="uppercase hover:bg-gray-100">Table</li></Link>
+                        <Link to="/cabinets"><li className="uppercase hover:bg-gray-100">Cabinet</li></Link>
+                        <Link to="/homedecors"><li className="uppercase hover:bg-gray-100">Home Decors</li></Link>
+                        <Link to="/cushions"><li className="uppercase hover:bg-gray-100">Cushion</li></Link>
+                        
+                        {user && (
                             <Link to="/orderhistory">
                                 <li className="uppercase font-semibold">My Orders</li>
                             </Link>

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IoCartOutline } from "react-icons/io5";
-import sofa  from '../../assets/sofa.jpg'
+import sofa  from '../../assets/sofa.jpg';
 import { Link } from "react-router-dom";
 
 const API_BED = "http://localhost:5050/products"
@@ -14,9 +13,9 @@ const Sofa = () => {
         axios
             .get(API_BED)
             .then((response) => {
-              // filtering Bed category from JSON-server
-              const filteredBed = response.data.filter(product => product.category === "sofa")
-              setProducts(filteredBed)
+              // filtering Sofa category from JSON-server
+              const filteredSofa = response.data.filter(product => product.category === "sofa")
+              setProducts(filteredSofa)
             })
             .catch((error) => console.error("Error fetching products:", error));
     }, []);
@@ -35,31 +34,26 @@ const Sofa = () => {
           </div>
         </div>
 
-        <div className="max-w-[100%] mx-20 px-4 my-10">
-                    <h2 className="text-center text-4xl font-bold text-gray-800 my-8">Our Collection</h2>
+        <div className="max-w-[100%] mx-10 md:mx-20 px-4 my-10">
+            <h2 className="text-center text-4xl font-bold text-gray-800 my-8">Our Collection</h2>
                     
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {products.map((product) => (
-                            <Link to={`/category/sofa/product/${product.id}`} key={product.id} className="bg-white shadow-md rounded-md overflow-hidden transform transition duration-300 hover:scale-105 relative">
-                                <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-                                
-                                <div className="p-4">
-                                    <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
-                                    <div className="flex relative">
-                                        <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
-                                        <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
-                                        <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off}% off</p>
-                                    </div>
-                                        <button className="absolute top-1.5 right-2 px-2 py-2 rounded-full bg-gray-100 opacity-85">
-                                            <IoCartOutline className="text-black transition duration-300 text-xl" />
-                                        </button>
-                                    
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-      
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {products.map((product) => (
+                    <Link to={`/category/sofa/product/${product.id}`} key={product.id} className="bg-white shadow-md rounded overflow-hidden transform transition duration-300 hover:scale-101 relative">
+                        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
+                        
+                        <div className="p-4">
+                            <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
+                            <div className="flex relative">
+                                <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
+                                <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
+                                <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off}% off</p>
+                            </div>
+                        </div>
+                    </Link>
+                ))}
+            </div>
+        </div>
     </section>
   )
 }

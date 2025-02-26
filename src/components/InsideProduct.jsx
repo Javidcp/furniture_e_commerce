@@ -3,23 +3,19 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { IoCartOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
-// Swiper
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
-
-
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
 import van from '../assets/van.svg'
 import warranty from '../assets/warranty.svg'
 import installation from '../assets/installation.svg'
 import { CartContext } from "./cart/CartContext";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Navigation,  Autoplay } from "swiper/modules";
 
 
 function ProductDetail() {
-    const { id } = useParams(); // Get product ID from URL
+    const { id } = useParams(); // get product ID from URL
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -47,7 +43,7 @@ function ProductDetail() {
         setQuantity(Number(e.target.value));
     };
 
-    const API = `http://localhost:5050/products/${id}`; // Correct API URL
+    const API = `http://localhost:5050/products/${id}`; // correct API URL
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -62,6 +58,8 @@ function ProductDetail() {
         };
 
         fetchProduct();
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     const handleCheckPincode = async () => {
@@ -70,9 +68,9 @@ function ProductDetail() {
             return;
         }
     
-        setChecking(true);
-        setPincodeError("");
-        setAvailability(null);
+        setChecking(true);  //API req in progress
+        setPincodeError("");    //clear prev err
+        setAvailability(null);  //reset the availability
     
         try {
             const response = await axios.get(`http://localhost:5050/pincodes?pincode=${pincode}`);
@@ -91,7 +89,7 @@ function ProductDetail() {
     };
 
     // 4 product showing related
-    const [relatedProducts, setRelatedProducts] = useState([]);
+    const [relatedProducts, setRelatedProducts] = useState([]); // for related product
 
     useEffect(() => {
         const fetchRelatedProducts = async () => {
@@ -107,33 +105,30 @@ function ProductDetail() {
         if (product.category) {
             fetchRelatedProducts();
         }
-    }, [product.category, product.id]);
+    }, [product.category, product.id]);     // run again whenever product.category or product.id change
 
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [id]); // Scroll to top when `id` changes
-
-
-
-
+    }, [id]); // scroll to top when ID changes
 
     
 
     if (loading) return <div className="text-center text-xl">Loading product...</div>;
     if (error) return <div className="text-center text-xl text-red-500">Error: {error}</div>;
-    if (!product || Object.keys(product).length === 0) return <div className="text-center text-xl text-red-500">Product not found.</div>;
+    if (!product?.id) return <div className="text-center text-xl text-red-500">Product not found.</div>;    //optional chaining safely access nested properties without causing errors
 
 
-    const productImages = [product.image, product.image1, product.image2, product.image3].filter(Boolean);
+    const productImages = [product.image, product.image1, product.image2, product.image3].filter(Boolean);  //Boolean will remove null, undefined, "", false values
 
     return (
         <section>
         <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-10 mt-20 mb-10">
-            {/* Left - Product Images */}
+            {/* left - product images */}
             <div className="w-full md:w-2/5">
                 <Swiper navigation={true} 
-                        modules={[Navigation]} 
+                        modules={[Navigation,  Autoplay]} 
+                        autoplay={{ delay: 3000 }}
                         className="relative mySwiper">
                 
 
@@ -144,28 +139,27 @@ function ProductDetail() {
                             </SwiperSlide>
                         ))
                     ) : (
-                        <SwiperSlide>
-                            <img src="/path/to/default-image.jpg" alt="Product Image" className="w-full h-96 object-cover rounded-md" />
-                        </SwiperSlide>
+                        <div className="w-full h-96 flex items-center justify-center bg-gray-200 text-gray-500">
+                            No Image Available
+                        </div>
                     )}
                 </Swiper>
             </div>
 
-            {/* Right - Product Info */}
+            {/* right - product info */}
             <div className="w-full md:w-3/5">
                 <h2 className="text-3xl font-bold">{product.name}</h2>
                 
                 <span className="flex text-sm border max-w-[95px] px-2 py-1 rounded border-gray-400 text-gray-500 relative">{product.ratingstar} <FaStar className="mt-1 ml-1 mr-3 text-amber-300" /> <span className="absolute left-[50%] right-[50%] top-0.5"> | </span> {product.rating}</span>
 
-                {/* Price Details */}
+                {/* price details */}
                 <div className="mt-1.5 mb-1.5">
                     <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
                     
                     <p className="text-green-600 font-medium">{product.off}% off</p>
                 </div>
 
-                {/* Quatity */}
-                
+                {/* quatity */}
                 <div className="border inline px-2 py-1.5 border-gray-300 rounded">
                     <label htmlFor="quantity">QTY </label>
                     <select id="quantity" className="focus:outline-none" value={quantity} onChange={handleQuantityChange}>
@@ -177,7 +171,7 @@ function ProductDetail() {
                     </select>
                 </div>
 
-                {/* Pincode Checker */}
+                {/* pincode checker */}
                 <div className="mt-2">
                     <h3 className="text-lg font-semibold mb-2">Check Delivery Availability</h3>
                     <div className="flex gap-2">
@@ -208,7 +202,7 @@ function ProductDetail() {
                 
 
 
-                {/* Add to Cart Button */}
+                {/* add to cart button */}
                 <button onClick={() => addToCart(product, quantity)} className="w-full mt-6 bg-red-600 text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
                     <IoCartOutline className="text-2xl" />
                     Add To Cart
@@ -219,7 +213,7 @@ function ProductDetail() {
 
 
 
-        {/* Product Details */}
+        {/* product details */}
         <div className="bg-gray-100 px-20 py-10">
             <h2 className="text-2xl font-semibold inline-block mb-6" style={{fontFamily : 'monospace'}}>Product Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
@@ -266,7 +260,7 @@ function ProductDetail() {
         </div>
 
 
-            {/* Product Policies */}
+            {/* product policies */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-20 mb-20 bg-gray-950 text-white py-9">
                 <div className="flex my-5 md:my-0">
                     <img src={van} className="w-18 mr-5" alt="" />
@@ -293,7 +287,7 @@ function ProductDetail() {
                 </div>
             </div>
 
-            {/* Related Products Section */}
+            {/* related products section */}
             <div className="mx-5 md:mx-20 mt-10">
                 <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[50%] mt-1 border-red-500 rounded-2xl" /></h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
@@ -328,7 +322,7 @@ function ProductDetail() {
 
 
 
-            {/* Accordion */}
+            {/* accordion */}
             <div className="px-15 my-10">
                 <h2 className="text-3xl font-semibold inline-block" style={{fontFamily : 'monospace'}}>FAQ <hr className="w-[70%] border-2 border-red-500 rounded-sm" /></h2>
                 <div className="mt-5 space-y-2">

@@ -4,14 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 
 
-function Cart() {
+const Cart = () => {
     const { cart, updateQuantity, removeFromCart } = useContext(CartContext);
     const navigate = useNavigate()
 
     const subTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    // Flat delivery charge
-    let DELIVERY_FEE = subTotal > 10000 ? 0 : 250;
+    let DELIVERY_FEE = subTotal > 10000 ? 0 : 250;  // delivery charge
     const totalAmount = subTotal + DELIVERY_FEE;
+
+    
 
     return (
         <div className=" mx-auto p-6 mt-10 md:mt-20">
@@ -62,7 +63,7 @@ function Cart() {
                             ))}
                         </div>
 
-                    {/* Summary Section */} 
+                    {/* price summary */} 
                     <div className="mt-6 md:mt-0 p-4 rounded-2xl shadow-sm w-[300px] relative mx-auto md:mx-0 h-[260px]">
                         <p className="font-semibold text-sm border-b pb-0.5 border-gray-300">Price summary</p>
                         <p className="text-md font-light text-gray-500 border-b border-dashed pb-1.5">Subtotal: <span className="float-end">₹ {subTotal.toLocaleString("en-IN")}</span></p>

@@ -2,9 +2,9 @@
 
 const HomeContent = () => {
     return (
-        <section className="px-5 sm:px-20 mt-10 py-10 bg-emerald-50">
-            <h3 className="text-2xl font-semibold my-5">Shop HomeHavean Furniture</h3>
-            <p className="text-justify">
+        <section className="px-5 sm:px-20 mt-10 py-10 bg-red-100">
+            <h3 className="text-xl font-semibold my-5">Shop HomeHavean Furniture</h3>
+            <p className="text-justify text-sm">
                 HomeHeaven has now been in existence since 2020. Over the last few years, we have serviced over 8 lakh customers, sold over 18 lakh 
                 products, and spent at least 1500 hours in research and development. We pride ourselves on being customer-centric and providing 
                 our customers with the very best home and sleep solutions. We have spent our initial years talking to our customers to understand 
@@ -22,8 +22,8 @@ const HomeContent = () => {
                 Being a modern brand of furniture in India, HomeHaven creates ergonomic designs that offer optimal muscular and postural 
                 support, thus reducing aches and pains while maximizing your comfort and relaxation.
             </p>
-            <h3 className="text-2xl font-semibold my-5">HomeHaven Home Solution</h3>
-            <p>
+            <h3 className="text-xl font-semibold my-5">HomeHaven Home Solution</h3>
+            <p className="text-justify text-sm">
                 With HomeHaven&apos;s home solutions, you can now curate the personalized, beautiful living room of your dreams. While shopping for 
                 furniture online, check out our living room furniture that includes the sturdy but sleek range of sofa set, shelves, coffee 
                 table, and much more! Additionally we also offer quality bedding products, Wardrobes & home products, etc. Moreover, 

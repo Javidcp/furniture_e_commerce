@@ -1,52 +1,211 @@
 {
   "users": [
     {
-      "id": "6bbc",
-      "name": "",
-      "email": "",
-      "password": ""
+      "id": "1",
+      "name": "admin",
+      "email": "admin@gmail.com",
+      "password": "Admin@123",
+      "createdAt": "2025-02-24T10:48:07.217Z",
+      "role": "admin",
+      "cart": [],
+      "purchaseHistory": []
     },
     {
-      "id": "e05c",
+      "id": "4cf2",
       "name": "javid",
-      "email": "frwdf@gmail.com",
-      "password": "efdcvf"
+      "email": "javi@gmail.com",
+      "password": "Javid#1010",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": [
+        {
+          "orderId": "ORD1740475585257945",
+          "date": "2/25/2025",
+          "name": "javid",
+          "email": "javi@gmail.com",
+          "paymentMethod": "Cash on Delivery",
+          "status": "Processing",
+          "items": [
+            {
+              "id": "14",
+              "category": "sofa",
+              "name": "Solatio Sofa - Three Seater",
+              "brand": "Solatio Sofa",
+              "materail": "Solid Wood",
+              "collections": "Solatio",
+              "dimensionscm": " L 1.81m x W 75cm x H 80cm",
+              "dimensionsinch": "71 x 30 x 31Inches",
+              "type": "Sofa",
+              "seatingheight": 31,
+              "weight": "37KG",
+              "price": 11998,
+              "oldprice": 15300,
+              "off": 22,
+              "rating": 434,
+              "ratingstar": 4.5,
+              "image": "https://ik.imagekit.io/2xkwa8s1i/img/npl_modified_images/SOFA_IMAGES/WSFASLTN3FJDB_LS_1.jpg?tr=w-1200",
+              "image1": "https://ik.imagekit.io/2xkwa8s1i/img/sofa_celeb/2.jpg?tr=w-1200",
+              "image2": "https://ik.imagekit.io/2xkwa8s1i/img/sofa-sets/solatio/fjdb/2.jpg?tr=w-1200",
+              "image3": "https://ik.imagekit.io/2xkwa8s1i/img/sofa-sets/solatio/fjdb/3.jpg?tr=w-1200",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 11998
+        },
+        {
+          "orderId": "ORD1740475772209674",
+          "date": "2/25/2025",
+          "name": "javid",
+          "email": "javi@gmail.com",
+          "paymentMethod": "Cash on Delivery",
+          "status": "Processing",
+          "items": [
+            {
+              "id": "8",
+              "category": "bed",
+              "name": "Enri King Size Bed in Wenge Finish with Headboard & Drawer Storage",
+              "brand": "Mintwud from Pepperfry",
+              "materail": "Engineered Wood",
+              "collections": "Enri King",
+              "dimensionscm": "H 90 x W 193 x D 213",
+              "dimensionsinch": "H 35.5 x W 76 x D 84",
+              "type": "Bedroom",
+              "seatingheight": 14,
+              "weight": "128 KG",
+              "price": 19499,
+              "oldprice": 31249,
+              "off": 38,
+              "rating": 434,
+              "ratingstar": 4.5,
+              "image": "https://ii1.pepperfry.com/media/catalog/product/e/n/764x840/enri-king-size-bed-with-drawer-storage-in-wenge-finish-by-mintwud-enri-king-size-bed-with-drawer-sto-x8qfv8.jpg",
+              "image1": "https://ii1.pepperfry.com/media/catalog/product/e/n/764x840/enri-king-size-bed-with-drawer-storage-in-wenge-finish-by-mintwud-enri-king-size-bed-with-drawer-sto-s46yg6.jpg",
+              "image2": "https://ii1.pepperfry.com/media/catalog/product/e/n/764x840/enri-king-size-bed-with-drawer-storage-in-wenge-finish-by-mintwud-enri-king-size-bed-with-drawer-sto-cgm3g5.jpg",
+              "image3": "https://ii1.pepperfry.com/media/catalog/product/e/n/764x840/enri-king-size-bed-with-drawer-storage-in-wenge-finish-by-mintwud-enri-king-size-bed-with-drawer-sto-kbmlkc.jpg",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 19499
+        },
+        {
+          "orderId": "ORD1740476172779705",
+          "date": "2/25/2025",
+          "name": "javid",
+          "email": "javi@gmail.com",
+          "paymentMethod": "Razorpay",
+          "status": "Processing",
+          "items": [
+            {
+              "id": "2",
+              "category": "bed",
+              "name": "Brevik Sheesham Wood Queen Size Bed In Provincial Teak Finish With Box Storage",
+              "brand": "Woodsworth from Pepperfry",
+              "materail": "Sheesham Wood",
+              "collections": "Brevik",
+              "dimensionscm": "H 94 x W 159 x D 211",
+              "dimensionsinch": "H 37 x W 62.5 x D 83",
+              "type": "Bedroom",
+              "seatingheight": 14,
+              "weight": "92KG",
+              "price": 30749,
+              "oldprice": 43999,
+              "off": 31,
+              "rating": 434,
+              "ratingstar": 4.5,
+              "image": "https://ii1.pepperfry.com/media/catalog/product/h/o/764x840/horten-sheesham-wood-queen-size-bed-in-provincial-teak-finish-with-box-storage-horten-sheesham-wood--oqknek.jpg",
+              "image1": "https://ii1.pepperfry.com/media/catalog/product/h/o/764x840/horten-sheesham-wood-queen-size-bed-in-provincial-teak-finish-with-box-storage-horten-sheesham-wood--9q532u.jpg",
+              "image2": "https://ii1.pepperfry.com/media/catalog/product/b/r/764x840/brevik-sheesham-wood-queen-size-bed-in-provincial-teak-finish-with-box-storage-brevik-sheesham-wood--gvqfw9.jpg",
+              "image3": "https://ii1.pepperfry.com/media/catalog/product/h/o/764x840/horten-sheesham-wood-queen-size-bed-in-provincial-teak-finish-with-box-storage-horten-sheesham-wood--ydyjav.jpg",
+              "quantity": 2
+            }
+          ],
+          "totalAmount": 61498
+        },
+        {
+          "orderId": "ORD1740476296763623",
+          "date": "2/25/2025",
+          "name": "javid",
+          "email": "javi@gmail.com",
+          "paymentMethod": "Cash on Delivery",
+          "status": "Processing",
+          "items": [
+            {
+              "id": "24",
+              "category": "sofa",
+              "name": "Barcelona Luxury Recliner Sofa",
+              "brand": "Comfort Haven",
+              "material": "Leather & Hardwood",
+              "collections": "Barcelona",
+              "dimensionscm": "L 1.95m x W 82cm x H 78cm",
+              "dimensionsinch": "76.8 x 32.3 x 30.7 inches",
+              "type": "Recliner Sofa",
+              "seatingheight": "38",
+              "weight": "120KG",
+              "price": 134999,
+              "oldprice": 189999,
+              "off": 29,
+              "rating": 420,
+              "ratingstar": 4.8,
+              "image": "https://ik.imagekit.io/2xkwa8s1i/img/npl_modified_images/KIRIBATI/WSFAKBTN311LVGR/WSFAKBTN311LVGR_LS_1.jpg?tr=w-1200",
+              "image1": "https://ik.imagekit.io/2xkwa8s1i/img/npl_modified_images/KIRIBATI/WSFAKBTN311LVGR/WSFAKBTN311LVGR_WB_2.jpg?tr=w-1200",
+              "image2": "https://ik.imagekit.io/2xkwa8s1i/img/npl_modified_images/KIRIBATI/WSFAKBTN311LVGR/WSFAKBTN311LVGR_S3_6.jpg?tr=w-1200",
+              "image3": "https://ik.imagekit.io/2xkwa8s1i/img/npl_modified_images/KIRIBATI/WSFAKBTN311LVGR/WSFAKBTN311LVGR_S4_7.jpg?tr=w-1200",
+              "quantity": 1
+            }
+          ],
+          "totalAmount": 134999
+        }
+      ]
     },
     {
-      "id": "368c",
-      "name": "",
-      "email": "",
-      "password": ""
-    },
-    {
-      "id": "65c0",
-      "name": "",
-      "email": "",
-      "password": ""
-    },
-    {
-      "id": "7791",
-      "name": "",
-      "email": "gefvf@gmail.com",
-      "password": "grfwevd"
-    },
-    {
-      "id": "fc85",
+      "id": "f3e0",
       "name": "javid",
-      "email": "aaa@gmail.com",
-      "password": "12345678"
+      "email": "javid@gmail.com",
+      "password": "Javid#1010",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": []
     },
     {
-      "id": "4314",
-      "name": "",
-      "email": "",
-      "password": ""
+      "id": "2bf8",
+      "name": "hello",
+      "email": "hello@gmail.com",
+      "password": "Hello@123",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": []
     },
     {
-      "id": "713b",
-      "name": "javid",
-      "email": "ooo@gmail.com",
-      "password": "12345678"
+      "id": "6b5e",
+      "name": "bye",
+      "email": "bye@gmail.com",
+      "password": "Bye@1234",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": []
+    },
+    {
+      "id": "9d25",
+      "name": "toto",
+      "email": "toto@gmail.com",
+      "password": "Toto@123",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": []
+    },
+    {
+      "id": "76dc",
+      "name": "kuku",
+      "email": "kuku@gmail.com",
+      "password": "Kuku@123",
+      "createdAt": "2025-02-25T10:48:07.217Z",
+      "role": "user",
+      "cart": [],
+      "purchaseHistory": []
     }
   ]
 }

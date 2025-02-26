@@ -14,7 +14,7 @@ const CustomBanner = () => {
                     <TbTruckDelivery className="size-8 shrink-0 text-red-500" />
                     <div>
                         <div className="text-xl font-medium text-black">Free Delivery</div>
-                        <p className="text-gray-500">on order abover ₹499</p>
+                        <p className="text-gray-500">on order abover ₹10,000</p>
                     </div>
                 </div>
                 <div className="mx-auto flex max-w-sm items-center gap-x-4">

@@ -1,14 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../components/Authentication/AuthContext";
+import axios from "axios";
 
 const OrderHistory = () => {
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
-        setOrders(storedOrders);
-    }, []);
+        if (!user) {
+            alert("You need to log in to view order history.");
+            navigate("/login");
+            return;
+        }
+
+        // Fetch user order history from JSON server
+        const fetchOrders = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5659/users/${user.id}`);
+                setOrders(response.data.purchaseHistory || []);
+            } catch (error) {
+                console.error("Error fetching order history:", error);
+            }
+        };
+
+        fetchOrders();
+    }, [user, navigate]);
 
     return (
         <div className="max-w-4xl mx-auto p-6 mt-20 bg-white shadow-lg rounded-lg">
@@ -27,8 +45,8 @@ const OrderHistory = () => {
 
                         <div className="mt-2">
                             <h4 className="text-md font-semibold">Items:</h4>
-                            {order.items.map((item, idx) => (
-                                <p key={idx} className="text-sm">
+                            {order.items.map((item, index) => (
+                                <p key={index} className="text-sm">
                                     {item.name} (x{item.quantity}) - ₹{item.price * item.quantity}
                                 </p>
                             ))}
