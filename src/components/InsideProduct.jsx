@@ -43,7 +43,7 @@ function ProductDetail() {
         setQuantity(Number(e.target.value));
     };
 
-    const API = `http://localhost:5050/products/${id}`; // correct API URL
+    const API = `http://localhost:5659/products/${id}`; // correct API URL
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -73,7 +73,7 @@ function ProductDetail() {
         setAvailability(null);  //reset the availability
     
         try {
-            const response = await axios.get(`http://localhost:5050/pincodes?pincode=${pincode}`);
+            const response = await axios.get(`http://localhost:5659/pincodes?pincode=${pincode}`);
             
             if (response.data.length > 0) {
                 setAvailability(response.data[0].available);
@@ -94,7 +94,7 @@ function ProductDetail() {
     useEffect(() => {
         const fetchRelatedProducts = async () => {
             try {
-                const response = await axios.get(`http://localhost:5050/products?category=${product.category}`);
+                const response = await axios.get(`http://localhost:5659/products?category=${product.category}`);
                 const filteredProducts = response.data.filter((p) => p.id !== product.id).slice(0, 4);
                 setRelatedProducts(filteredProducts);
             } catch (err) {

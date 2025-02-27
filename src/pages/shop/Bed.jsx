@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import bed from '../../assets/bed.jpg'
 
 
-const API_BED = "http://localhost:5050/products"
+const API_BED = "http://localhost:5659/products"
 
 const Bed = () => {
 

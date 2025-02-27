@@ -1,7 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { IoMdArrowDropdown } from "react-icons/io";
-import { useContext, useEffect, useState } from "react";
+
+import { useContext, useState } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
 
 const Responsive = ({ showMenu, setShowMenu }) => {
@@ -32,12 +32,12 @@ const Responsive = ({ showMenu, setShowMenu }) => {
                     <div className="flex items-center gap-3">
                         <FaUserCircle size={50} className="text-red-500" />
                         <div>
-                            <h1>Hello {user ? user.name : "Guest"}</h1>
+                            <h1>Hello {user ? user.name.toUpperCase() : "Guest"}</h1>
                             {!user ? (
                                 <Link to="/login" className="text-sm text-red-500">Login</Link>
                             ) : (
                                 <button onClick={() => setShowDropdown(!showDropdown)} className="text-sm text-gray-500 flex items-center gap-1">
-                                    Account <IoMdArrowDropdown />
+                                    Premium User
                                 </button>
                             )}
                         </div>

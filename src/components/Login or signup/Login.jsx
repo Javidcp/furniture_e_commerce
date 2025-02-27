@@ -19,7 +19,6 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            console.log("✅ User logged in:", user);
             user.role === "admin" ? navigate("/dashboard") : navigate("/");
         }
     }, [user, navigate]); // ⏳ Runs when `user` updates
@@ -58,10 +57,10 @@ const Login = () => {
                 name,
                 email,
                 password,
-                createdAt: new Date(),
+                createdAt: new Date().toISOString().split('T')[0], // Stores only YYYY-MM-DD
                 role: "user",
                 cart: [],
-                purchaseHistory: []
+                purchaseHistory: [],
             };
 
             await axios.post(API_USER, newUser);

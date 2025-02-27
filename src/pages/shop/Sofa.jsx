@@ -3,7 +3,7 @@ import axios from "axios";
 import sofa  from '../../assets/sofa.jpg';
 import { Link } from "react-router-dom";
 
-const API_BED = "http://localhost:5050/products"
+const API_BED = "http://localhost:5659/products"
 
 const Sofa = () => {
 

@@ -11,7 +11,7 @@ function ProductList({ categoryName, numProducts = 4 }) {
     useEffect(() => {
         const fetchProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:5050/products?category=${categoryName}`);
+            const response = await axios.get(`http://localhost:5659/products?category=${categoryName}`);
             setProducts(response.data.slice(0, numProducts));
         } catch (err) {
             setError(err);

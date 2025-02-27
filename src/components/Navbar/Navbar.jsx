@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { IoCartOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
@@ -83,7 +83,7 @@ const Navbar = () => {
                                 onClick={() => setShowDropdown(!showDropdown)}
                             >
                                 <FaUserCircle size={20} className="text-red-500" />
-                                
+                                {user.name.toUpperCase()}
                                 <IoMdArrowDropdown />
                             </button>
 

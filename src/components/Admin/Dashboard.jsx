@@ -22,7 +22,7 @@ const Dashboard = () => {
             try {
                 const [usersRes, productsRes] = await Promise.all([
                     axios.get("http://localhost:5659/users"),
-                    axios.get("http://localhost:5050/products"),
+                    axios.get("http://localhost:5659/products"),
                 ]);
 
                 setUsers(usersRes.data);
@@ -53,14 +53,14 @@ const Dashboard = () => {
     
     // Filter pending/failed transactions
     const pendingOrders = orders.filter(order => order.status === "Processing");
-    const failedOrders = orders.filter(order => order.status === "Failed");
+    const failedOrders = orders.filter(order => order.status === "Cancelled");
 
     return (
-        <div className="ml-64 flex-1 px-6    ">
-                <div className="p-3 mb-5 bg-gray-700 rounded">Ecommerce</div>
+        <div className="flex-1 px-6 mt-12">
+                <div className="p-3 mb-5 bg-gray-200 rounded">Ecommerce</div>
 
             {/* Dashboard Summary */}
-            <div className="grid grid-cols-2 gap-4 text-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
                 <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #80F841, #38B789)"}}>
                     <h3 className="text-lg font-semibold">Total Users</h3>
                     <p className="text-2xl">{users.length}</p>
@@ -83,7 +83,7 @@ const Dashboard = () => {
             <h3 className="text-xl font-bold mt-6">Recent User Activity</h3>
             <table className="w-full mt-3">
                 <thead>
-                    <tr className="bg-gray-700">
+                    <tr className="bg-gray-200">
                         <th className="p-2">User</th>
                         <th className="p-2">Email</th>
                         <th className="p-2">Registered</th>
@@ -104,7 +104,7 @@ const Dashboard = () => {
             <h3 className="text-xl font-bold mt-6">Recent Orders</h3>
             <table className="w-full  mt-3">
                 <thead>
-                    <tr className="bg-gray-700">
+                    <tr className="bg-gray-200">
                         <th className="p-2">Order ID</th>
                         <th className="p-2">User</th>
                         <th className="p-2">Total</th>
@@ -128,7 +128,7 @@ const Dashboard = () => {
             </table>
 
             {/* Pending & Failed Orders */}
-            <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
                     <h3 className="text-xl font-bold text-yellow-600 my-2">Pending Orders</h3>
                     <ul className="bg-yellow-100 text-black  p-3 rounded">

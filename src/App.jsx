@@ -72,7 +72,7 @@ function App() {
           <CartProvider>
             <RouterProvider router={router} />
           </CartProvider>
-      </AuthProvider>,
+      </AuthProvider>
 
     </>
   )
