@@ -19,7 +19,10 @@ const OrderHistory = () => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(`http://localhost:5659/users/${user.id}`);
-                setOrders(response.data.purchaseHistory || []);
+                const sortedOrders = (response.data.purchaseHistory || []).sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at)
+                );
+                setOrders(sortedOrders);
             } catch (error) {
                 console.error("Error fetching order history:", error);
             }
@@ -41,7 +44,7 @@ const OrderHistory = () => {
                         <p><strong>Order Date:</strong> {order.date}</p>
                         <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
                         <p><strong>Status:</strong> {order.status}</p>
-                        <p className="font-bold">Total: ₹{order.totalAmount}</p>
+                        <p><strong>Total:</strong> ₹ {order.totalAmount.toLocaleString("en-IN")}</p>
 
                         <div className="mt-2">
                             <h4 className="text-md font-semibold">Items:</h4>

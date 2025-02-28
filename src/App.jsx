@@ -29,6 +29,10 @@ import Products from './components/Admin/Products.jsx'
 import Orders from './components/Admin/Order.jsx'
 import Dashboard from './components/Admin/Dashboard.jsx'
 import UserDetails from './components/Admin/UserDetails.jsx'
+import ProductDetails from './components/Admin/PrdouctDetails.jsx'
+import EditProduct from './components/Admin/EditProduct.jsx'
+import AddProduct from './components/Admin/AddProduct.jsx'
+import OrderDetail from './components/Admin/OrderDetail.jsx'
 
 
 
@@ -57,7 +61,11 @@ const router = createHashRouter([
       { path: 'users', element: <Users /> },
       { path: 'orders', element: <Orders /> },
       { path: 'products', element: <Products /> },
-      { path: 'users/:id', element: <UserDetails /> }
+      { path: 'users/:id', element: <UserDetails /> },
+      { path: 'products/:id', element: <ProductDetails /> },
+      { path: 'products/edit/:id', element: <EditProduct /> },
+      { path: 'products/add', element: <AddProduct /> },
+      { path: 'orders/orderdetails/:orderId', element: <OrderDetail /> }
   ] }
 ])
 

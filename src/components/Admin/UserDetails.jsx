@@ -35,10 +35,10 @@ const UserDetails = () => {
                 <h2 className="text-2xl font-medium p-2 rounded mb-5">Customer Details</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-6">
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Name</span> {user.name}</div>
-                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Location</span> {user.purchaseHistory.length > 0 ? user.purchaseHistory[0]?.address?.country : "Not Available"}</div>
+                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Location</span> {user.purchaseHistory?.length > 0 ? user.purchaseHistory[0]?.address?.country : "Not Available"}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Email</span> {user.email}</div>
                     <div className="text-gray-600 font-medium"><span className="uppercase text-sm font-medium text-gray-400">Status</span><span className="flex text-green-400 my-2"> <TiTick size={23} /> Activated</span></div>
-                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Phone Number</span> {user.purchaseHistory.length > 0 ? user.purchaseHistory[0]?.address?.mobile : "Not Available"}</div>
+                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Phone Number</span> {user.purchaseHistory?.length > 0 ? user.purchaseHistory[0]?.address?.mobile : "Not Available"}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Sign Up</span> {user.createdAt}</div>
                 </div>
 

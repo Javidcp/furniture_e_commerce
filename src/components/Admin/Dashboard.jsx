@@ -55,6 +55,21 @@ const Dashboard = () => {
     const pendingOrders = orders.filter(order => order.status === "Processing");
     const failedOrders = orders.filter(order => order.status === "Cancelled");
 
+    const handleStatus = (status) => {
+        switch (status) {
+            case "Processing" :
+                return "text-yellow-400"
+            case "Shipped" :
+                return "text-orange-500"
+            case "Delivered" :
+                return "text-green-500"
+            case "Cancelled" :
+                return "text-red-500"
+            default :
+                return status;
+        }
+    }
+
     return (
         <div className="flex-1 px-6 mt-12">
                 <div className="p-3 mb-5 bg-gray-200 rounded">Ecommerce</div>
@@ -119,7 +134,7 @@ const Dashboard = () => {
                             <td className="p-2">{order.name}</td>
                             <td className="p-2">₹{order.totalAmount.toLocaleString("en-IN")}</td>
                             <td className="p-2">{new Date(order.date).toLocaleDateString()}</td>
-                            <td className={`p-2 font-semibold ${order.status === "Processing" ? "text-yellow-600" : order.status === "Failed" ? "text-red-600" : "text-green-600"}`}>
+                            <td className={`p-2 font-semibold ${handleStatus(order.status)}`}>
                                 {order.status}
                             </td>
                         </tr>

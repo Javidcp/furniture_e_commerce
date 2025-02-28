@@ -1,5 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { MdDeleteOutline } from "react-icons/md";
+import { FaRegEye } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -20,7 +23,7 @@ const Products = () => {
     }
 
     const extractCategory = (products) => {
-        const uniqueCategories = ["All category", ... new Set(products.map((p) => p.category))]
+        const uniqueCategories = ["All Category", ... new Set(products.map((p) => p.category))]
         setCategories(uniqueCategories)
     }
 
@@ -32,10 +35,23 @@ const Products = () => {
         const category = event.target.value;
         setSelectedCategory(category)
 
-        if (category ===  "All category") {
+        if (category ===  "All Category") {
             setFilteredProduct(products)
         } else {
             setFilteredProduct(products.filter((p) => p.category === category))
+        }
+    }
+
+    // delete product
+    const handleDelete = async (id) => {
+        if (window.confirm("Are you sure about deleting this product")) {
+            try {
+                await axios.delete(`http://localhost:5659/products/${id}`)
+                setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id))
+            } catch (error) {
+                console.log("Error deleting product", error);
+                
+            }
         }
     }
 
@@ -43,17 +59,24 @@ const Products = () => {
         <div className="mt-12">
             <h2 className="text-2xl font-bold mb-4 rounded bg-gray-200 p-2">Product List</h2>
             
-            <div className="mb-4">
-                <label className="mr-2">Filter by Category:</label>
-                <select 
-                    className="p-2 bg-gray-200  border border-gray-200 rounded outline-0" 
-                    value={selectedCategory} 
-                    onChange={handleCategory}
-                >
-                    {categories.map((category) => (
-                        <option key={category} value={category}>{category}</option>
-                    ))}
-                </select>
+            <div className="flex justify-between">
+                <div className="mb-4">
+                    <label className="mr-2">Filter by Category:</label>
+                    <select 
+                        className="p-2 bg-gray-200  border border-gray-200 rounded outline-0" 
+                        value={selectedCategory} 
+                        onChange={handleCategory}
+                    >
+                        {categories.map((category) => (
+                            <option key={category} value={category}>{category}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mt-3">
+                    <Link to={`/dashboard/products/add`} className="py-2 px-8 bg-black text-white">
+                        Add
+                    </Link>
+                </div>
             </div>
 
             <table className="border w-full border-gray-200">
@@ -78,8 +101,17 @@ const Products = () => {
                                     </div>
                             </td>
                             <td className="p-1.5 text-center">{product.category}</td>
-                            <td className="p-1.5 ">₹ {product.price.toLocaleString("en-IN")}</td>
-                            <td className="p-1.5 text-cente"></td>
+                            <td className="p-1.5 ">₹ {product.price}</td>
+                            <td className="p-1.5 text-center ">
+                                <div className="flex items-center justify-center space-x-3">
+                                    <Link to={`/dashboard/products/${product.id}`} className="text-blue-400 cursor-pointer">
+                                                <FaRegEye size={18} />
+                                    </Link>
+                                    <button onClick={() => handleDelete(product.id)} className="text-red-600">
+                                        <MdDeleteOutline size={18} />
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

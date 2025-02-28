@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 
 const Order = () => {
     const [orders, setOrders] = useState([]);
@@ -87,7 +89,9 @@ const Order = () => {
                         <th className="p-2">Customer</th>
                         <th className="p-2">Total Quantity</th>
                         <th className="p-2 text-left">Total Price</th>
+                        <th className="p-2">Date</th>
                         <th className="p-2">Status</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -98,13 +102,18 @@ const Order = () => {
 
                             return (
                                 <tr key={order.orderId} className="border-b border-gray-300">
-                                    <td className="p-2">{order.orderId}</td>
+                                    <td className="p-2">
+                                        <Link to={`/dashboard/orders/orderdetails/${order.orderId}`}>
+                                            {order.orderId}
+                                        </Link>
+                                    </td>
                                     <td className="p-2 text-center">{order.customerName || "Unknown"}</td>
                                     <td className="p-2 text-center">{totalQuantity}</td>
                                     <td className="p-2 ">₹ {totalPrice.toLocaleString("en-IN")}</td>
+                                    <td className="p-2 text-center">{order.date}</td>
                                     <td className="p-2 text-center">
                                         <select
-                                            className={`border border-gray-400 p-1 rounded ${statusColor(order.status)}`}
+                                            className={`border border-gray-400 p-1 rounded outline-0 ${statusColor(order.status)}`}
                                             value={order.status}
                                             onChange={(e) => handleStatusChange(order.orderId, order.userId, e.target.value)}
                                         >

@@ -154,7 +154,7 @@ function ProductDetail() {
 
                 {/* price details */}
                 <div className="mt-1.5 mb-1.5">
-                    <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
+                    <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice.toLocaleString("en-IN")}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
                     
                     <p className="text-green-600 font-medium">{product.off}% off</p>
                 </div>
@@ -254,7 +254,7 @@ function ProductDetail() {
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Weight</h2>
-                    <p className="text-gray-500 text-md">{product.weight}</p>
+                    <p className="text-gray-500 text-md">{product.weight}KG</p>
                 </div>
             </div>
         </div>
