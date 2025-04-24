@@ -12,8 +12,6 @@ const OrderDetails = () => {
             try {
                 const response = await axios.get(`http://localhost:5659/users`)
                 const users = response.data
-
-                console.log("response", users);
                 
                 let foundOrder = null;
 
@@ -29,15 +27,12 @@ const OrderDetails = () => {
                     } else {
                         console.log("Order Not Found");
                     }
-                
-                
             } catch (error) {
                 console.log("Error Fetching Order Details", error);
             }
         } 
 
         fetchOrder()
-
     }, [orderId])
 
     const handleStatus = (status) => {
@@ -75,6 +70,7 @@ const OrderDetails = () => {
                         <div key={item.id} className="my-10">
                             <div className="tracking-wider mb-1"><strong className="text-gray-600 tracking-normal">Name :</strong> {item.name}</div>
                             <div className="tracking-wider mb-1"><strong className="text-gray-600 tracking-normal">Brand :</strong> {item.brand}</div>
+                            <div className="tracking-wider mb-1"><strong className="text-gray-600 tracking-normal">Quantity :</strong> {item.quantity}</div>
                             <div className="tracking-wider mb-1"><strong className="text-gray-600 tracking-normal">Price :</strong>₹ {item.price.toLocaleString("en-IN")} <span className="text-[9px] ml-2">₹ {item.oldprice.toLocaleString("en-IN")}</span></div>
                             <img src={item.image} className="w-60 h-60 m-2 rounded" alt={item.name} />
                         </div>

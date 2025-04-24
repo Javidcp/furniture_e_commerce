@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -13,8 +14,14 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (!user || user.role !== "admin") {
-            alert("Access Denied: You are not an admin!");
-            navigate("/");
+            Swal.fire({
+                title: "Access Denied!",
+                text: "You are not an admin!",
+                icon: "error",
+                confirmButtonText: "OK"
+            }).then(() => {
+                navigate("/");
+            });
             return;
         }
 
@@ -31,9 +38,9 @@ const Dashboard = () => {
                 const allOrders = usersRes.data.flatMap(user => user.purchaseHistory || []);
                 setOrders(allOrders);
 
-                // Calculate total revenue (30% of item price from each order)
+                
                 const revenue = allOrders.reduce((total, order) => {
-                    return total + order.items.reduce((sum, item) => sum + (item.price * 0.3 * item.quantity), 0);
+                    return total + order.items.reduce((sum, item) => sum + (item.price * 0.25 * item.quantity), 0);
                 }, 0);
 
                 setTotalRevenue(revenue);
@@ -45,13 +52,13 @@ const Dashboard = () => {
         fetchData();
     }, [user, navigate]);
 
-    // Sort users by most recent registration/login
+    // recent registration users (5)
     const recentUsers = [...users].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 5);
     
-    // Sort orders by most recent date
+    // recent orders (5)
     const recentOrders = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
     
-    // Filter pending/failed transactions
+    // filter processing / failed transactions
     const pendingOrders = orders.filter(order => order.status === "Processing");
     const failedOrders = orders.filter(order => order.status === "Cancelled");
 
@@ -74,28 +81,28 @@ const Dashboard = () => {
         <div className="flex-1 px-6 mt-12">
                 <div className="p-3 mb-5 bg-gray-200 rounded">Ecommerce</div>
 
-            {/* Dashboard Summary */}
+            {/* Dashboard */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #80F841, #38B789)"}}>
+                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #80F841, #38D782)"}}>
                     <h3 className="text-lg font-semibold">Total Users</h3>
                     <p className="text-2xl">{users.length}</p>
                 </div>
-                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #D92FDA, #E7B2FF)"}}>
+                <div className="px-4 py-10 rounded" style={{background : "linear-gradient(to right, #D92FDA, #E1A0FF)"}}>
                     <h3 className="text-lg font-semibold">Total Orders</h3>
                     <p className="text-2xl">{orders.length}</p>
                 </div>
-                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #05B5C6, #412FFF)"}}>
+                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #05B5F9, #462FFF)"}}>
                     <h3 className="text-lg font-semibold">Total Products</h3>
                     <p className="text-2xl">{products.length}</p>
                 </div>
-                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #F0F42D, #FEAF2C)"}}>
+                <div className="px-4 py-10 rounded"  style={{background : "linear-gradient(to right, #F0F42D, #DEAF2C)"}}>
                     <h3 className="text-lg font-semibold">Total Revenue</h3>
                     <p className="text-2xl">₹{totalRevenue.toFixed(2)}</p>
                 </div>
             </div>
 
-            {/* Recent User Activity */}
-            <h3 className="text-xl font-bold mt-6">Recent User Activity</h3>
+            {/* 5 recent user registered */}
+            <h3 className="text-xl font-bold mt-6">Recent Registered User</h3>
             <table className="w-full mt-3">
                 <thead>
                     <tr className="bg-gray-200">
@@ -106,8 +113,10 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                     {recentUsers.map((user, index) => (
-                        <tr key={index} className="border-b border-gray-700 text-center">
-                            <td className="p-2">{user.name}</td>
+                        <tr key={index} className="border-b border-gray-400 text-center">
+                            <td className="p-2">
+                                <Link to={`/dashboard/users/${user.id}`}>{user.name.toUpperCase()}</Link>
+                            </td>
                             <td className="p-2">{user.email}</td>
                             <td className="p-2">{new Date(user.createdAt).toLocaleDateString()}</td>
                         </tr>
@@ -115,7 +124,7 @@ const Dashboard = () => {
                 </tbody>
             </table>
 
-            {/* Recent Orders */}
+            {/* recent orders */}   
             <h3 className="text-xl font-bold mt-6">Recent Orders</h3>
             <table className="w-full  mt-3">
                 <thead>
@@ -129,8 +138,10 @@ const Dashboard = () => {
                 </thead>
                 <tbody>
                     {recentOrders.map((order, index) => (
-                        <tr key={index} className="border-b border-gray-700 text-center">
-                            <td className="p-2">{order.orderId}</td>
+                        <tr key={index} className="border-b border-gray-400 text-center">
+                            <td className="p-2">
+                                <Link className="hover:underline" to={`/dashboard/orders/orderdetails/${order.orderId}`}>{order.orderId}</Link>
+                            </td>
                             <td className="p-2">{order.name}</td>
                             <td className="p-2">₹{order.totalAmount.toLocaleString("en-IN")}</td>
                             <td className="p-2">{new Date(order.date).toLocaleDateString()}</td>
@@ -142,21 +153,27 @@ const Dashboard = () => {
                 </tbody>
             </table>
 
-            {/* Pending & Failed Orders */}
+            {/* Proccessing & failed orders */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                 <div>
-                    <h3 className="text-xl font-bold text-yellow-600 my-2">Pending Orders</h3>
+                    <h3 className="text-xl font-bold text-yellow-600 my-2">Processing Orders</h3>
                     <ul className="bg-yellow-100 text-black  p-3 rounded">
                         {pendingOrders.length > 0 ? pendingOrders.map((order, index) => (
-                            <li key={index} className="border-b p-2 text-sm"><span className="uppercase">Order  </span>:   #{order.orderId} - ₹{order.totalAmount.toLocaleString("en-IN")}</li>
-                        )) : <p className="p-2">No pending orders</p>}
+                            <li key={index} className="border-b border-gray-300 p-2 text-sm flex justify-between">
+                                <span>Order  </span> - 
+                                <Link className="hover:underline" to={`/dashboard/orders/orderdetails/${order.orderId}`}>#{order.orderId}</Link> - 
+                                <span>₹{order.totalAmount.toLocaleString("en-IN")}</span></li>
+                        )) : <p className="p-2">No processing orders</p>}
                     </ul>
                 </div>
                 <div>
                     <h3 className="text-xl font-bold text-red-600 my-2">Failed Transactions</h3>
                     <ul className="bg-red-100 text-black p-3 rounded">
                         {failedOrders.length > 0 ? failedOrders.map((order, index) => (
-                            <li key={index} className="border-b p-2">Order #{order.orderId} - ₹{order.totalAmount.toLocaleString("en-IN")}</li>
+                            <li key={index} className="border-b border-gray-300 p-2 flex justify-between">
+                                <span>Order</span> - 
+                                <Link className="hover:underline" to={`/dashboard/orders/orderdetails/${order.orderId}`}>#{order.orderId}</Link> - 
+                                <span>₹{order.totalAmount.toLocaleString("en-IN")}</span></li>
                         )) : <p className="p-2">No failed transactions</p>}
                     </ul>
                 </div>

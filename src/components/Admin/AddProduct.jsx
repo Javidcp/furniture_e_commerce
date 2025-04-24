@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const AddProduct = () => {
 
@@ -19,7 +20,7 @@ const AddProduct = () => {
             type: "",
             seatingheight: "",
             weight: 0,
-            off: 0,
+            off: "",
             rating: 0,
             ratingstar: "",
             image: "",
@@ -41,7 +42,7 @@ const AddProduct = () => {
         axios
             .post("http://localhost:5659/products",product)
             .then (() => {
-                alert("Product Added Succesfull")
+                Swal.fire("Success","Product Added Succesfull","success")
                 navigate('/dashboard/products')
             })
             .catch ((err) => {
@@ -108,7 +109,7 @@ const AddProduct = () => {
                 </div>
                 <div>
                     <label className="block text-gray-600">Discount:</label>
-                    <input type="number" name="discount" value={product.off} onChange={handleAdd} placeholder="Discount" className="w-full border rounded p-2"/>
+                    <input type="number" name="off" value={product.off} onChange={handleAdd} placeholder="Discount" className="w-full border rounded p-2"/>
                 </div>
                 {/* <div className="flex">
                     <div className="w-full mr-1">
@@ -123,7 +124,7 @@ const AddProduct = () => {
                 
                 {["image", "image1", "image2", "image3"].map((img, index) => (
                     <div key={index}>
-                        <label className="block text-gray-600">Image {index}:</label>
+                        <label className="block text-gray-600">Image {index + 1}:</label>
                         <img src={product[img]} className="w-30 h-30 p-2" alt={`Product ${index + 1}`} />
                         <input type="text" name={img} value={product[img]} onChange={handleAdd} placeholder={`Image ${index + 1} URL`} className="w-full border rounded p-2"/>
                     </div>

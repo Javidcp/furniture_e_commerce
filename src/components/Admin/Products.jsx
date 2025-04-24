@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -29,6 +30,7 @@ const Products = () => {
 
     useEffect(() => {
         fetchProduct()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleCategory = (event) => {
@@ -44,13 +46,40 @@ const Products = () => {
 
     // delete product
     const handleDelete = async (id) => {
-        if (window.confirm("Are you sure about deleting this product")) {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, keep it",
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5659/products/${id}`)
-                setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id))
+                await axios.delete(`http://localhost:5659/products/${id}`);
+                const updatedProducts = products.filter((product) => product.id !== id);
+                setProducts(updatedProducts);
+    
+                setFilteredProduct(
+                    selectedCategory === "All Category"
+                        ? updatedProducts
+                        : updatedProducts.filter((p) => p.category === selectedCategory)
+                );
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "The product has been deleted.",
+                    icon: "success"
+                });
             } catch (error) {
-                console.log("Error deleting product", error);
-                
+                console.error("Error deleting product", error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "There was a problem deleting the product.",
+                    icon: "error"
+                });
             }
         }
     }
@@ -94,18 +123,18 @@ const Products = () => {
                         <tr key={product.id} className=" border-b border-gray-200">
                             <td className="p-1.5 text-center border-r border-gray-200">#{product.id}</td>
                             <td className="p-1.5 flex">
-                                <img src={product.image} alt="" className="w-12" /> 
-                                    <div className="block pl-5">
-                                        <div className="block">{product.name}</div>
-                                        <div className="block text-sm text-gray-400">{product.brand}</div>
-                                    </div>
+                                <img src={product.image} alt="product.id" className="w-12 h-12" /> 
+                                <div className="block pl-5">
+                                    <div className="block">{product.name}</div>
+                                    <div className="block text-sm text-gray-400">{product.brand}</div>
+                                </div>
                             </td>
                             <td className="p-1.5 text-center">{product.category}</td>
-                            <td className="p-1.5 ">₹ {product.price}</td>
+                            <td className="p-1 min-w-[80px]">₹ {product.price.toLocaleString("en-IN")}</td>
                             <td className="p-1.5 text-center ">
                                 <div className="flex items-center justify-center space-x-3">
                                     <Link to={`/dashboard/products/${product.id}`} className="text-blue-400 cursor-pointer">
-                                                <FaRegEye size={18} />
+                                        <FaRegEye size={18} />
                                     </Link>
                                     <button onClick={() => handleDelete(product.id)} className="text-red-600">
                                         <MdDeleteOutline size={18} />

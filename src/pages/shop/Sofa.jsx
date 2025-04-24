@@ -39,15 +39,14 @@ const Sofa = () => {
                     
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {products.map((product) => (
-                    <Link to={`/category/sofa/product/${product.id}`} key={product.id} className="bg-white shadow-md rounded overflow-hidden transform transition duration-300 hover:scale-101 relative">
-                        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-                        
-                        <div className="p-4">
-                            <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
-                            <div className="flex relative">
-                                <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
-                                <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
-                                <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off}% off</p>
+                    <Link to={`/category/sofa/product/${product.id}`} key={product.id} className="bg-gray-100  rounded overflow-hidden  relative">
+                        <span className='absolute m-2 px-2 py-0.5 bg-[#2d9596]  text-white text-sm rounded-full'>-{product.off}%</span>
+                        <img src={product.image} alt={product.name} className="w-full h-70 object-cover p-10" />
+                        <div className=' bg-white p-2 px-3'>
+                          <h6 className='text-sm'>{product.shortname}</h6>
+                            <div className="flex">
+                              <small className=''>₹{product.price.toLocaleString("en-IN")}</small>
+                              <small className='line-through text-[10px] mt-1 ml-2'>₹{product.price.toLocaleString("en-IN")}</small>
                             </div>
                         </div>
                     </Link>

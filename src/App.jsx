@@ -33,12 +33,13 @@ import ProductDetails from './components/Admin/PrdouctDetails.jsx'
 import EditProduct from './components/Admin/EditProduct.jsx'
 import AddProduct from './components/Admin/AddProduct.jsx'
 import OrderDetail from './components/Admin/OrderDetail.jsx'
+import SearchButton from './components/Navbar/SearchButton.jsx'
 
 
 
 
 const router = createHashRouter([
-  {path: '', element: <RootLayout />,errorElement: <Error /> , children: [
+  {path: '', element: <RootLayout />, errorElement: <Error /> , children: [
     { path: '/', element: <Home /> },
     { path: '/table', element: <Table /> },
     { path: '/chair', element: <Chair /> },
@@ -55,8 +56,9 @@ const router = createHashRouter([
     { path: '/about', element: <About /> },
     { path: '/contact', element: <Contact /> },
     { path: '/category/:category/product/:id', element: <ProductDetail /> },
+    { path: '/search', element: <SearchButton />}
   ]},
-  { path: '/dashboard', element: <ProtectedRoute><AdminPanel /></ProtectedRoute>, children: [
+  { path: '/dashboard', element: <ProtectedRoute><AdminPanel /></ProtectedRoute>, errorElement: <Error /> , children: [
       { path: '', element: <Dashboard /> },
       { path: 'users', element: <Users /> },
       { path: 'orders', element: <Orders /> },

@@ -24,26 +24,23 @@ function ProductList({ categoryName, numProducts = 4 }) {
         fetchProducts();
     }, [categoryName, numProducts]);
 
-    if (loading) return <div>Loading products...</div>;
-    if (error) return <div>Error: {error.message}</div>;
-    if (products.length === 0) return <div>No {categoryName} products found.</div>;
+    if (loading) return <div>Loading products...</div>
+    if (error) return <div>Error: {error.message}</div>
+    if (products.length === 0) return <div>No {categoryName} products found.</div>
     
 
     return (
         <section className='max-w-7xl mx-2 md:mx-10 px-4 my-10' id='popular-product'>
             <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-4 gap-6">
                 {products.map((product) => (
-                    <Link to={`/category/${product.category}/product/${product.id}`} key={product.id} className="bg-white shadow-md rounded overflow-hidden  transform transition duration-300 hover:scale-102 relative flex flex-col">
-                        <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
-                        
-                        <div className="p-4">
-                            <h5 className="text-lg font-semibold text-black truncate">{product.name}</h5>
-                            <div className="flex items-center relative">
-                                <p className="text-black mt-2">₹ {product.price.toLocaleString("en-IN")}</p>
-                                <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {product.oldprice.toLocaleString("en-IN")}</p>
-                                <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{product.off  }% off</p>
-                            </div>
+                    <Link to={`/category/${product.category}/product/${product.id}`} key={product.id} className="bg-gray-100 overflow-hidden  relative flex flex-col ">
+                        <span className='absolute m-2 px-2 py-0.5 bg-[#2d9596]  text-white text-sm rounded-full'>-{product.off}%</span>
+                        <img src={product.image} alt={product.name} className="w-full h-70 object-cover p-10" />
+                        <div className=' bg-white p-2 px-3 text-center '>
+                                <h6 className='text-sm'>{product.shortname}</h6>
+                                <small className=''>₹{product.price.toLocaleString("en-IN")}</small>
                         </div>
+                        
                     </Link>
                 ))}
             </div>

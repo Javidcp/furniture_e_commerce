@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { IoCartOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
@@ -7,6 +7,11 @@ import { FaUserCircle } from "react-icons/fa";
 import Responsive from "../Navbar/Responsive";
 import { CartContext } from "../cart/CartContext";
 import { AuthContext } from "../Authentication/AuthContext"; // Import AuthContext
+import Swal from "sweetalert2";
+import SearchButton from "./SearchButton";
+
+import "@fontsource/montserrat";
+
 
 const Navbar = () => {
     const { cart } = useContext(CartContext);
@@ -15,14 +20,28 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const navigate = useNavigate();
+    const [scrolled, setScrolled] = useState(false);
+
+
+
+    useEffect(() => {
+        const handleScroll = () => {
+        setScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+
     
 
     if (!authContext) {
-        console.error("AuthContext is not available. Make sure AuthProvider is wrapping your application.");
+        console.error("AuthContext is not available");
         return null;
     }
 
-    const { user, logout } = authContext; // Now it's safe to destructure
+    const { user, logout } = authContext;
 
     const toggle = () => {
         setShowMenu((prev) => !prev);
@@ -34,70 +53,68 @@ const Navbar = () => {
     };
 
     return (
-        <div className="bg-white sm:px-4 fixed w-full z-50 shadow-sm top-0 shadow-gray-100" style={{ fontFamily: 'sans-serif' }}>
-            <div className="max-w-7xl mx-auto py-3 px-5 sm:px-15.5 flex justify-between items-center">
-                <Link to="/"><div className='text-2xl font-extrabold'>HOME<span className="text-red-500">HAVEN</span></div></Link>
+        
+        <div className={`fixed  ${scrolled ? 'bg-[#f5f5f5] shadow-md': ''} w-full z-40 top-0 `} style={{ fontFamily: 'sans-serif' }}>
+            <div className="max-w-7xl mx-auto py-3 px-2 flex justify-between items-center">
+                <Link to="/"><div className={`text-2xl font-extrabold ${scrolled ? 'text-black':''}`}>HOME<span className="text-[#2d9596]">HAVEN</span></div></Link>
 
-                <div className="flex items-center gap-5 hidden lg:block">
+                <div className=" items-center gap-5 hidden lg:block">
                     <nav>
                         <ul className="flex items-center text-sm font-medium gap-5">
-                            <Link to='/'><li className="text-red-500 font-semibold">HOME</li></Link>
+                            <Link to='/'><li className="text-[#2d9596] font-semibold" style={{fontFamily : "Montserrat, sans-serif"}}>HOME</li></Link>
 
                             {/* Dropdown Button */}
-                            <div className="relative inline-block" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-                                <button className="cursor-pointer flex uppercase items-center justify-between gap-1 px-0 py-2">
+                            <div className="relative inline-block \" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+                                <button className={`cursor-pointer flex uppercase items-center justify-between gap-1 px-0 py-2 ${scrolled ? 'text-black':''}`} style={{fontFamily : "Montserrat, sans-serif"}}>
                                     collections<span>{isOpen ? <IoMdArrowDropup size={15} /> : <IoMdArrowDropdown size={15} />}</span>
                                 </button>
                                 {isOpen && (
-                                    <ul className="absolute left-0 w-40 bg-white" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
-                                        <Link to='/sofa'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Sofa</li></Link>
-                                        <Link to='/bed'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Bed</li></Link>
-                                        <Link to='/wardrobe'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Wardrobe</li></Link>
-                                        <Link to='/chair'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Chair</li></Link>
-                                        <Link to='/table'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Table</li></Link>
-                                        <Link to='/cabinets'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Cabinet</li></Link>
-                                        <Link to='/homedecors'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Home Decors</li></Link>
-                                        <Link to='/cushions'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-red-500">Cushion</li></Link>
+                                    <ul className="absolute left-0 top-6 z-30 w-40 bg-white" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setTimeout(setIsOpen(false), 1000)}>
+                                        <Link to='/sofa'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Sofa</li></Link>
+                                        <Link to='/bed'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Bed</li></Link>
+                                        <Link to='/wardrobe'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Wardrobe</li></Link>
+                                        <Link to='/chair'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Chair</li></Link>
+                                        <Link to='/table'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Table</li></Link>
+                                        <Link to='/cabinets'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Cabinet</li></Link>
+                                        <Link to='/homedecors'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Home Decors</li></Link>
+                                        <Link to='/cushions'><li className="uppercase py-2 px-3 hover:bg-gray-100 hover:text-[#2d9596]">Cushion</li></Link>
                                     </ul>
                                 )}
                             </div>
-                            <Link to='/about' className="uppercase hover:text-red-500">About</Link>
-                            <Link to='/contact' className="uppercase hover:text-red-500">Contact</Link>
+                            <Link to='/about' className={`uppercase ${scrolled ? 'text-black':''} hover:text-[#2d9596]`} style={{fontFamily : "Montserrat, sans-serif"}}>About</Link>
+                            <Link to='/contact' className={`uppercase ${scrolled ? 'text-black':''} hover:text-[#2d9596]`} style={{fontFamily : "Montserrat, sans-serif"}}>Contact</Link>
                         </ul>
                     </nav>
                 </div>
 
-                <div className="flex items-center gap-5 text-xs lg:text-sm">
+                <div className="flex items-center gap-5 text-xs lg:text-sm ">
+                <SearchButton />
+                    
                     {/* Conditional rendering for login dropdown */}
                     {!user ? (
-                        <Link to='/login'>
-                            <button className="cursor-pointer hidden md:block px-4 border border-red-500 py-2 rounded-3xl text-red-500 hover:bg-red-500 hover:text-white">
+                        <Link to='/login' className="z-20">
+                            <button className={`cursor-pointer hidden md:block px-4 bg-[#343434]  py-2 rounded-3xl ${scrolled ? 'text-white':''} hover:bg-[#2d9596] hover:text-white`}>
                                 Login
                             </button>
                         </Link>
                     ) : (
                         <div className="relative hidden md:block">
-                            {/* User Button */}
+                            {/* user btn */}
                             <button
-                                className="flex items-center gap-2 px-3 py-2 border rounded-3xl border-gray-300 hover:bg-gray-200"
+                                className="flex items-center"
                                 onClick={() => setShowDropdown(!showDropdown)}
                             >
-                                <FaUserCircle size={20} className="text-red-500" />
-                                {user.name.toUpperCase()}
-                                <IoMdArrowDropdown />
+                                <FaUserCircle size={30} className="text-black bg-amber-50 rounded-full border-0 outline-0" />
                             </button>
 
-                            {/* Dropdown Menu */}
+                            {/* Dropdown menu */}
                             {showDropdown && (
-                                <ul
-                                    className="absolute left-0 w-40 bg-white"
-                                    onMouseEnter={() => setShowDropdown(true)}
-                                    onMouseLeave={() => setShowDropdown(false)}
-                                >
+                                <ul className="absolute right-[-30px] top-[46px] w-30 bg-white" onMouseEnter={() => setShowDropdown(true)} onMouseLeave={() => setShowDropdown(false)}>
+                                    <li className="px-4 py-2 font-bold bg-gray-100">{user.name.toUpperCase()}</li>
                                     <Link to="/orderhistory">
                                         <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Orders</li>
                                     </Link>
-                                    <li className="px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                                    <li className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
                                         Logout
                                     </li>
                                 </ul>
@@ -105,12 +122,12 @@ const Navbar = () => {
                         </div>
                     )}
 
-                    {/* Cart Button - Prevents Non-Logged Users from Accessing */}
+                    {/* Cart - prevent non-Logged users */}
                     <button
-                        className="relative bg-amber-50 p-2 rounded-2xl"
+                        className="relative bg-white p-2 rounded-2xl"
                         onClick={() => {
                             if (!user) {
-                                alert("You need to log in to access the cart.");
+                                Swal.fire("LogIn","You need to log in to access the cart","warning");
                                 navigate("/login");
                             } else {
                                 navigate("/cart");

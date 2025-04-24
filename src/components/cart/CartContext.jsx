@@ -1,17 +1,18 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { AuthContext } from "../Authentication/AuthContext"; // Import AuthContext
+import { AuthContext } from "../Authentication/AuthContext"; 
+import Swal from "sweetalert2";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export function CartProvider({ children }) {
-    const { user } = useContext(AuthContext); // Get user from AuthContext
+    const { user } = useContext(AuthContext);
 
     const [cart, setCart] = useState([]);
     const [purchaseHistory, setPurchaseHistory] = useState([]);
 
-    // ✅ Load cart & purchase history when user logs in
+    
     useEffect(() => {
         if (user) {
             const savedCart = JSON.parse(localStorage.getItem(`cart_${user.email}`)) || [];
@@ -19,13 +20,11 @@ export function CartProvider({ children }) {
             setCart(savedCart);
             setPurchaseHistory(savedHistory);
         } else {
-            // ✅ Reset cart & purchase history when user logs out
             setCart([]);
             setPurchaseHistory([]);
         }
-    }, [user]); // Runs when user changes
-
-    // ✅ Save cart & history to localStorage when they change
+    }, [user]);
+    
     useEffect(() => {
         if (user) {
             localStorage.setItem(`cart_${user.email}`, JSON.stringify(cart));
@@ -33,10 +32,14 @@ export function CartProvider({ children }) {
         }
     }, [cart, purchaseHistory, user]);
 
-    // ✅ Add item to cart
+    // Add item to cart
     const addToCart = (product, quantity = 1) => {
         if (!user) {
-            alert("You need to log in to add items to the cart.");
+            Swal.fire({
+                title: "LogIn",
+                text: "You need To LogIn to add items to cart",
+                icon: "warning"
+            });
             return;
         }
         setCart((prevCart) => {
@@ -50,12 +53,12 @@ export function CartProvider({ children }) {
         });
     };
 
-    // ✅ Remove from cart
+    
     const removeFromCart = (id) => {
         setCart((prevCart) => prevCart.filter((item) => item.id !== id));
     };
 
-    // ✅ Update item quantity
+    
     const updateQuantity = (id, quantity) => {
         setCart((prevCart) =>
             prevCart.map((item) =>
@@ -64,14 +67,14 @@ export function CartProvider({ children }) {
         );
     };
 
-    // ✅ Checkout: Move cart items to purchase history
+    
     const checkout = () => {
         if (!user) {
-            alert("You need to log in to complete the purchase.");
+            Swal.fire("LogIn","You need to log in to complete the purchase","warning");
             return;
         }
         if (cart.length === 0) {
-            alert("Your cart is empty.");
+            Swal.fire("Empty","Your cart is empty","info");
             return;
         }
 
@@ -85,7 +88,7 @@ export function CartProvider({ children }) {
         };
 
         setPurchaseHistory((prevHistory) => [...prevHistory, newOrder]);
-        setCart([]); // ✅ Clear cart after checkout
+        setCart([]);
     };
 
     return (

@@ -11,7 +11,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
 
     return (
-        <div className={`fixed top-0 left-0 h-screen p-5 z-10 transition-transform transform shadow bg-white ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className={`fixed top-0 left-0 h-screen p-5 z-30 transition-transform transform shadow bg-white ${isOpen ? "translate-x-0" : "-translate-x-full"}`}>
             <button className="text-2xl mb-2 block text-gray-400" onClick={toggleSidebar}>&times;</button>
             <div className='text-2xl font-extrabold  mb-10'>HOME<span className="text-red-500">HAVEN</span></div>
             <ul>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../components/cart/CartContext";
 import { AuthContext } from "../components/Authentication/AuthContext";   
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Payment = () => {
     const { cart, setCart } = useContext(CartContext);
@@ -13,7 +14,7 @@ const Payment = () => {
     const [formData, setFormData] = useState({
         firstname: "",
         lastname: "",
-        email: user?.email || "", // Prefill email if user is logged in
+        email: user?.email || "", // Prefill email
         street: "",
         city: "",
         state: "",
@@ -22,7 +23,7 @@ const Payment = () => {
         mobile: "",
     });
 
-    // Payment method state
+    // payment method state
     const [method, setMethod] = useState("Cash on Delivery");
     const [cardDetails, setCardDetails] = useState({
         cardNumber: "",
@@ -31,36 +32,39 @@ const Payment = () => {
         cvv: "",
     });
 
-    // Calculate totals
+    //calculate totals
     const subTotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const DELIVERY_FEE = subTotal > 10000 ? 0 : 250;
     const totalAmount = subTotal + DELIVERY_FEE;
 
-    // Handle input change
+    // handle input change
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Handle card details input change
+    // handle card details input change
     const handleCardChange = (e) => {
         const { name, value } = e.target;
     
     if (name === "cardNumber") {
-        if (!/^\d{0,16}$/.test(value.replace(/\s/g, ""))) return; // Allow only up to 16 digits
-        setCardDetails({ ...cardDetails, cardNumber: value.replace(/\D/g, "").replace(/(.{4})/g, "$1 ").trim() }); // Format as XXXX XXXX XXXX XXXX
+        if (!/^\d{0,16}$/.test(value.replace(/\s/g, ""))) return; // 16 digit
+        let formattedCard = value.replace(/\D/g, "").substring(0, 16);  
+        formattedCard = formattedCard.replace(/(.{4})/g, "$1 ").trim();  
+        setCardDetails({ ...cardDetails, cardNumber: formattedCard });
+
     } 
     else if (name === "owner") {
-        if (!/^[A-Za-z\s]{0,50}$/.test(value)) return; // Only letters and spaces
+        if (!/^[A-Za-z\s]{0,50}$/.test(value)) return; // only letters and spaces
         setCardDetails({ ...cardDetails, owner: value });
     } 
     else if (name === "expiryDate") {
-        if (!/^\d{0,2}\/?\d{0,2}$/.test(value)) return; // Format MM/YY
-        let formattedValue = value.replace(/\D/g, ""); // Remove non-numeric characters
+        if (!/^\d{0,2}\/?\d{0,2}$/.test(value)) return; // format MM/YY
+        let formattedValue = value.replace(/\D/g, ""); // remove non-numeric characters
         if (formattedValue.length > 2) formattedValue = formattedValue.slice(0, 2) + "/" + formattedValue.slice(2, 4);
         setCardDetails({ ...cardDetails, expiryDate: formattedValue });
     } 
     else if (name === "cvv") {
-        if (!/^\d{0,4}$/.test(value)) return; // 3-4 digits only
+        if (!/^\d{0,3}$/.test(value)) return; // 3 digits only
         setCardDetails({ ...cardDetails, cvv: value });
     }
 };
@@ -69,28 +73,48 @@ const validateCardDetails = () => {
     const { cardNumber, owner, expiryDate, cvv } = cardDetails;
     if (method !== "Cash on Delivery") {
         if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ""))) {
-            alert("Invalid card number. It should be 16 digits.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Invalid card number. It should be 16 digits.",
+                icon: "warning"
+            });
             return false;
         }
         if (!/^[A-Za-z\s]{3,50}$/.test(owner)) {
-            alert("Invalid card owner name. Use only letters.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Invalid card owner name. Use only letters.",
+                icon: "warning"
+            });
             return false;
         }
         if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
-            alert("Invalid expiry date format. Use MM/YY.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Invalid expiry date format. Use MM/YY.",
+                icon: "warning"
+            });
             return false;
         }
 
         const [month, year] = expiryDate.split("/").map(Number);
-        const currentYear = new Date().getFullYear() % 100; // Get last two digits of the year
+        const currentYear = new Date().getFullYear() % 100;
         const currentMonth = new Date().getMonth() + 1;
 
         if (month < 1 || month > 12 || (year < currentYear || (year === currentYear && month < currentMonth))) {
-            alert("Card expiry date is invalid or expired.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Card expiry date is invalid or expired.",
+                icon: "warning"
+            });
             return false;
         }
         if (!/^\d{3}$/.test(cvv)) {
-            alert("Invalid CVV. Must be 3 or 4 digits.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Invalid CVV. Must be 3 digits.",
+                icon: "warning"
+            });
             return false;
         }
     }
@@ -104,13 +128,21 @@ const validateCardDetails = () => {
         }
 
         if (!user) {
-            alert("You need to be logged in to place an order.");
+            Swal.fire({
+                title: "Invalid",
+                text: "You need to be logged in to place an order.",
+                icon: "warning"
+            });
             navigate("/login");
             return;
         }
     
         if (cart.length === 0) {
-            alert("Your cart is empty.");
+            Swal.fire({
+                title: "Invalid",
+                text: "Your cart is empty",
+                icon: "warning"
+            });
             navigate("/");
             return;
         }
@@ -118,7 +150,11 @@ const validateCardDetails = () => {
         const { firstname, lastname, email, street, city, state, pincode, country, mobile } = formData;
     
         if (!firstname || !lastname || !email || !street || !city || !state || !pincode || !country || !mobile) {
-            alert("Please fill in all required fields.");
+            Swal.fire({
+                title: "Reqiure",
+                text: "Please fill in all required fields.",
+                icon: "warning"
+            });
             return;
         }
     
@@ -127,7 +163,11 @@ const validateCardDetails = () => {
         if (method !== "Cash on Delivery") {
             const { cardNumber,owner, expiryDate, cvv } = cardDetails;
             if (!cardNumber || !owner || !expiryDate || !cvv) {
-                alert("Please enter valid card details.");
+                Swal.fire({
+                    title: "Invalid",
+                    text: "Please enter valid card details.",
+                    icon: "warning"
+                });
                 return;
             }
             cardInfo = { cardNumber, owner, expiryDate, cvv }; // Store card details in JSON Server
@@ -143,40 +183,45 @@ const validateCardDetails = () => {
             items: cart,
             totalAmount,
             address: { firstname, lastname, email, street, city, state, pincode, country, mobile },
-            cardDetails: cardInfo, // Attach card details if applicable
+            cardDetails: cardInfo,
         };
     
         try {
-            // Fetch existing user data from JSON server
             const response = await axios.get(`http://localhost:5659/users/${user.id}`);
-            const existingUser = response.data;
-    
-            // Append new order to purchase history
+            const existingUser = response.data || {};
+            
             const updatedUser = {
                 ...existingUser,
                 purchaseHistory: [...(existingUser.purchaseHistory || []), newOrder],
                 cart: [],
             };
-    
-            // Update user data on the server
+        
             await axios.put(`http://localhost:5659/users/${user.id}`, updatedUser);
-    
             setCart([]);
             localStorage.removeItem(`cart_${user.email}`);
-    
-            alert("Order placed successfully!");
+        
+            Swal.fire({
+                title: "Success",
+                text: "Order placed successfully!",
+                icon: "success"
+            });
             navigate("/orderhistory");
         } catch (error) {
             console.error("Error saving order:", error);
+            Swal.fire({
+                title: "Error",
+                text: "Failed to place order. Please try again.",
+                icon: "error"
+            });
         }
-    };
+    }        
     
 
     
 
     return (
         <div className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t my-8 md:my-20 mx-5 md:mx-20">
-            {/* Left side - Delivery information */}
+            {/* Left side - delivery information */}
             <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
                 <h2 className="text-xl sm:text-2xl my-3 uppercase font-normal text-gray-400">
                     Delivery <span className="text-black">Information</span>

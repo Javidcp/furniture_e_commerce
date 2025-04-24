@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
 
+// eslint-disable-next-line react/prop-types
 const Responsive = ({ showMenu, setShowMenu }) => {
     const authContext = useContext(AuthContext);
     const navigate = useNavigate();

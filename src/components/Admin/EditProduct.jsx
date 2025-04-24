@@ -1,26 +1,27 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const EditProduct = () => {
-    const { id } = useParams(); // Get product ID from URL
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [product, setProduct] = useState({
         name: "",
         brand: "",
         category: "",
-        price: Number,
-        oldprice: Number,
+        price: 0,
+        oldprice: 0,
         materail: "",
         collections: "",
         dimensionscm: "",
         dimensionsinch: "",
         type: "",
         seatingheight: "",
-        weight: Number,
-        off: Number,
-        rating: Number,
+        weight: 0,
+        off: 0,
+        rating: 0,
         ratingstar: "",
         image: "",
         image1: "",
@@ -29,7 +30,7 @@ const EditProduct = () => {
 
     });
 
-    // Fetch product details
+    
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -42,18 +43,22 @@ const EditProduct = () => {
         fetchProduct();
     }, [id]);
 
-    // Handle form changes
+    
     const handleChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
     };
 
-    // Handle form submission
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.put(`http://localhost:5659/products/${id}`, product);
-            alert("Product updated successfully!");
-            navigate(`/dashboard/products/${id}`); // Redirect to product details
+            Swal.fire({
+                title: "Updated",
+                text: "Your product has been updated",
+                icon: "success"
+            });
+            navigate(`/dashboard/products/${id}`);
         } catch (error) {
             console.log("Error updating product:", error);
         }
@@ -78,11 +83,11 @@ const EditProduct = () => {
                 <div className="flex">
                     <div className="w-full mr-1">
                         <label className="block text-gray-600">Price:</label>
-                        <input type="number" name="price" value={product.price.toLocaleString("en-IN")} onChange={handleChange} className="w-full border rounded p-2"/>
+                        <input type="number" name="price" value={product.price} onChange={handleChange} className="w-full border rounded p-2"/>
                     </div>
                     <div className="w-full ml-1">
                         <label className="block text-gray-600">Old Price:</label>
-                        <input type="number" name="oldprice" value={product.oldprice.toLocaleString("en-IN")} onChange={handleChange} className="w-full border rounded p-2"/>
+                        <input type="number" name="oldprice" value={product.oldprice} onChange={handleChange} className="w-full border rounded p-2"/>
                     </div>
                 </div>
                 <div>

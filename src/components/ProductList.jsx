@@ -10,43 +10,82 @@ import { Link } from 'react-router-dom'
 
 
 const ProductList = () => {
+    
+
     return (
         <section>
             <h2 className='text-center text-2xl md:text-4xl font-bold my-8'>Shop By Category </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-5 md:mx-20 text-center">
-                <Link to='/sofa' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${sofa})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Sofas & Seating</p>
+            <div className="grid grid-cols-[200px_1fr] md:grid-cols-[300px_1fr]   md:mx-20 text-center">
+            <div className='flex flex-col text-start gap-6 text-[#164a4b] font-semibold text-lg my-30 relative'>
+                <hr className='rotate-90 absolute top-48.5 z-30 right-29 h-2 w-[368px]'/>
+                <li className=""><Link to='/sofa'>Sofas</Link></li>
+                <li className=""><Link to='/bed'>Beds</Link></li>
+                <li className=""><Link to='/wardrobe'>Wardrobes</Link></li>
+                <li className=""><Link to='/chair'>Chairs</Link></li>
+                <li className=""><Link to='/table'>Table</Link></li>
+                <li className=""><Link to='/cabinets'>Cabinets</Link></li>
+                <li className=""><Link to='/homedecors'>Home Decor</Link></li>
+                <li className=""><Link to='/cushions'>Cushions</Link></li>
+            </div>
+            <div className='grid grid-cols-1 md:grid-cols-3'>                
+                <Link to='/sofa' className="mx-auto relative w-[250px] h-[200px] mt-1.5 rounded-xl shadow-md overflow-hidden group" style={{ backgroundImage: `url(${sofa})`, backgroundPosition: 'center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Sofas</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/bed' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${bed})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Beds</p>
+
+                <Link to='/bed' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-1.5 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${bed})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Beds</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/wardrobe' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${wardrobe})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Wardrobes</p>
+                <Link to='/wardrobe' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-1.5 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${wardrobe})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Wardrobes</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/chair' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${chair})` , backgroundPosition : 'bottom' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Chairs</p>
+                <Link to='/chair' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-4 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${chair})` , backgroundPosition : 'bottom' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Chairs</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/table' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${table})` , backgroundPosition : 'bottom' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Kitchen & Dinnig Tables</p>
+                <Link to='/table' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-4 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${table})` , backgroundPosition : 'bottom' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Tables</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/cabinets' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${shelves})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Cabinets & Shelves</p>
+                <Link to='/cabinets' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-4 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${shelves})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Cabinets</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/homedecors' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${light})` , backgroundPosition : 'top' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Home Decor & Lighting</p>
+                <Link to='/homedecors' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-4 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${light})` , backgroundPosition : 'top' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Home Decor</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                <Link to='/cushions' className='mx-auto'>
-                    <div className='shadow-sm w-[200px] h-[200px] rounded-full mt-5' style={{backgroundImage : `url(${pillow})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}></div>
-                    <p className='my-3 font-semibold text-sm'>Pillows & Cushions</p>
+                <Link to='/cushions' className='mx-auto relative w-[250px] shadow-md h-[200px] mt-4 rounded-xl overflow-hidden group' style={{backgroundImage : `url(${pillow})` , backgroundPosition : 'center' , backgroundSize : 'cover', backgroundRepeat : 'no-repeat'}}>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <div className='bg-black opacity-30 w-full h-full absolute'></div>
+                        <span className="text-white text-xl mb-2 z-10">Cushions</span>
+                        <button className="bg-white text-black px-4 py-1 rounded z-10">Explore</button>
+                    </div>
                 </Link>
-                
+                </div>
             </div>
         </section>
     )

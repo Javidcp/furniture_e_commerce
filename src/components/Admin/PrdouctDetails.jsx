@@ -7,7 +7,7 @@ import { MdOutlineModeEdit } from "react-icons/md";
 
 
 const ProductDetails = () => {
-    const { id } = useParams(); // Get product ID from URL
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -21,7 +21,6 @@ const ProductDetails = () => {
                 setError("Product not found");
                 console.log("Error Fetching", err);
             } finally {
-                
                 setLoading(false);
             }
         };
@@ -29,7 +28,7 @@ const ProductDetails = () => {
         fetchProductDetails();
     }, [id]);
 
-    if (loading) return <p>Loading product details...</p>;
+    if (loading) return <p className="text-xl">Loading product details...</p>;
     if (error) return <p className="text-red-500">{error}</p>;
 
     return (

@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import Swal from "sweetalert2";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -11,36 +12,43 @@ export const AuthProvider = ({ children }) => {
     });
 
     const login = async (email, password) => {
-        console.log("🔍 Attempting login with:", email, password);
+        
 
         try {
-            // ✅ Fetch only the user with the matching email
+            // Fetch only the user with the matching email
             const response = await fetch(`http://localhost:5659/users?email=${email}`);
             const users = await response.json();
-            console.log("📝 Fetched users:", users);
+            
 
             if (users.length === 0) {
-                console.log("❌ User not found");
-                alert("Invalid email or password!");
+                Swal.fire({
+                    title: "Error",
+                    text: "Invalid Email or Password",
+                    icon: "error"
+                });
                 return;
             }
 
-            const foundUser = users[0]; // Get the first user that matches
+            const foundUser = users[0]; // get the first user that matches
 
-            // ✅ Check if password matches
+            // Check if password matches
             if (foundUser.password !== password) {
-                console.log("❌ Incorrect password for:", foundUser.email);
-                alert("Invalid email or password!");
+                Swal.fire({
+                    title: "Error",
+                    text: "Invalid Email or Password",
+                    icon: "error"
+                });
                 return;
             }
 
-            console.log("✅ User authenticated:", foundUser);
+            
 
             const userData = {
                 id: foundUser.id,
                 email: foundUser.email,
                 name: foundUser.name,
                 role: foundUser.role || "user",
+                blocked: foundUser.blocked || false,
                 cart: foundUser.cart || [],
                 purchaseHistory: foundUser.purchaseHistory || [],
             };
@@ -49,14 +57,18 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem("user", JSON.stringify(userData));
             localStorage.setItem("isLoggedIn", "true");
 
+        // eslint-disable-next-line no-unused-vars
         } catch (error) {
-            console.error("❌ Error fetching user:", error);
-            alert("Error connecting to the server. Please try again later.");
+            Swal.fire({
+                title: "Error",
+                text: "Error connecting to the server. Please try again later.",
+                icon: "error"
+            });
         }
     };
 
     const logout = () => {
-        console.log("🔴 Logging out user:", user?.email);
+        Swal.fire("Logout","Logout successfull","success")
         setUser(null);
         localStorage.removeItem("user");
         localStorage.removeItem("isLoggedIn");

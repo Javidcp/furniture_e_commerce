@@ -2,6 +2,9 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TiTick } from "react-icons/ti";
+import { MdBlock } from "react-icons/md";
+
+
 
 
 const UserDetails = () => {
@@ -10,7 +13,7 @@ const UserDetails = () => {
     const [totalAmount, setTotalAmount] = useState(0);
 
 
-    // Fetch user details including purchase history
+    
     useEffect(() => {
         axios
             .get(`http://localhost:5659/users/${id}`)
@@ -18,7 +21,7 @@ const UserDetails = () => {
                 const userData = response.data;
                 setUser(userData);
 
-                // Calculate total amount from purchase history
+                
                 const total = userData.purchaseHistory.reduce((acc, order) => acc + order.totalAmount, 0);
                 setTotalAmount(total);
             })
@@ -34,10 +37,10 @@ const UserDetails = () => {
             <div className="bg-gray-100 text-black p-3 rounded-md my-4">
                 <h2 className="text-2xl font-medium p-2 rounded mb-5">Customer Details</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-6">
-                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Name</span> {user.name}</div>
+                    <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Name</span> {user.name.toUpperCase()}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Location</span> {user.purchaseHistory?.length > 0 ? user.purchaseHistory[0]?.address?.country : "Not Available"}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Email</span> {user.email}</div>
-                    <div className="text-gray-600 font-medium"><span className="uppercase text-sm font-medium text-gray-400">Status</span><span className="flex text-green-400 my-2"> <TiTick size={23} /> Activated</span></div>
+                    <div className="text-gray-600 font-medium"><span className="uppercase text-sm font-medium text-gray-400">Status</span>{user.blocked === false ? <span className="flex text-green-400 my-2"> <TiTick size={23} /> Activated</span> : <span className="flex text-red-600 my-2"><MdBlock className="mt-1 mr-1" size={18} />  Blocked</span>}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Phone Number</span> {user.purchaseHistory?.length > 0 ? user.purchaseHistory[0]?.address?.mobile : "Not Available"}</div>
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Sign Up</span> {user.createdAt}</div>
                 </div>
@@ -45,7 +48,7 @@ const UserDetails = () => {
                 <h2 className="text-2xl font-medium p-2 rounded my-5">Customer Card</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-6">
                     <div className="text-gray-600 font-medium"><span className="block uppercase text-sm font-medium text-gray-400 my-2">Card Number</span>
-                        {(() => {
+                        {(() => { //IIFE
                             const purchaseHistory = user?.purchaseHistory || [];
                             const lastPurchase = purchaseHistory.find((order) => order.cardDetails);
                             return lastPurchase?.cardDetails?.cardNumber || "Not Available";

@@ -8,10 +8,6 @@ import van from '../assets/van.svg'
 import warranty from '../assets/warranty.svg'
 import installation from '../assets/installation.svg'
 import { CartContext } from "./cart/CartContext";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Navigation,  Autoplay } from "swiper/modules";
 
 
 function ProductDetail() {
@@ -69,7 +65,7 @@ function ProductDetail() {
         }
     
         setChecking(true);  //API req in progress
-        setPincodeError("");    //clear prev err
+        setPincodeError("");    //clear prev error
         setAvailability(null);  //reset the availability
     
         try {
@@ -105,7 +101,7 @@ function ProductDetail() {
         if (product.category) {
             fetchRelatedProducts();
         }
-    }, [product.category, product.id]);     // run again whenever product.category or product.id change
+    }, [product.category, product.id]); 
 
 
     useEffect(() => {
@@ -119,57 +115,47 @@ function ProductDetail() {
     if (!product?.id) return <div className="text-center text-xl text-red-500">Product not found.</div>;    //optional chaining safely access nested properties without causing errors
 
 
-    const productImages = [product.image, product.image1, product.image2, product.image3].filter(Boolean);  //Boolean will remove null, undefined, "", false values
+    
 
     return (
         <section>
         <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-10 mt-20 mb-10">
-            {/* left - product images */}
             <div className="w-full md:w-2/5">
-                <Swiper navigation={true} 
-                        modules={[Navigation,  Autoplay]} 
-                        autoplay={{ delay: 3000 }}
-                        className="relative mySwiper">
-                
-
-                    {productImages.length > 0 ? (
-                        productImages.map((img, index) => (
-                            <SwiperSlide key={index}>
-                                <img src={img} alt={`Product ${index}`} className="w-full h-96 object-cover  rounded-md" />
-                            </SwiperSlide>
-                        ))
-                    ) : (
-                        <div className="w-full h-96 flex items-center justify-center bg-gray-200 text-gray-500">
-                            No Image Available
-                        </div>
-                    )}
-                </Swiper>
+                <div className="grid grid-cols-2 gap-2">
+                    {product.image && <img src={product.image} alt="" className="w-60 h-45 rounded-2xl shadow-sm" />}
+                    {product.image1 && <img src={product.image1} alt="" className="w-60 h-45 rounded-2xl shadow-sm" />}
+                    {product.image2 && <img src={product.image2} alt="" className="w-60 h-45 rounded-2xl shadow-sm" />}
+                    {product.image3 && <img src={product.image3} alt="" className="w-60 h-45 rounded-2xl shadow-sm" />}
+                </div>
             </div>
 
-            {/* right - product info */}
+            
             <div className="w-full md:w-3/5">
-                <h2 className="text-3xl font-bold">{product.name}</h2>
-                
-                <span className="flex text-sm border max-w-[95px] px-2 py-1 rounded border-gray-400 text-gray-500 relative">{product.ratingstar} <FaStar className="mt-1 ml-1 mr-3 text-amber-300" /> <span className="absolute left-[50%] right-[50%] top-0.5"> | </span> {product.rating}</span>
+                <p className="text-gray-600">{product.shortname}</p>
+                <p className="text-lg text-gray-500 font-semibold">{product.name}</p>
 
                 {/* price details */}
                 <div className="mt-1.5 mb-1.5">
                     <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice.toLocaleString("en-IN")}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
                     
-                    <p className="text-green-600 font-medium">{product.off}% off</p>
+                    <p className="text-green-600 font-medium">{product.off || 0}% off</p>
                 </div>
 
+
+                <span className="flex text-sm border mb-3 max-w-[95px] px-2 py-1 mt-2 rounded border-gray-400 text-gray-500 relative">{product.ratingstar || "0.0"} <FaStar className="mt-1 ml-1 mr-3 text-amber-300" /> <span className="absolute left-[50%] right-[50%] top-0.5"> | </span> {product.rating || 0}</span>
+
                 {/* quatity */}
-                <div className="border inline px-2 py-1.5 border-gray-300 rounded">
-                    <label htmlFor="quantity">QTY </label>
-                    <select id="quantity" className="focus:outline-none" value={quantity} onChange={handleQuantityChange}>
-                        {[...Array(10).keys()].map((num) => (
-                        <option key={num + 1} value={num + 1}>
-                            {num + 1}
-                        </option>
-                        ))}
-                    </select>
-                </div>
+                <div className="flex items-center p-1 rounded-full bg-gray-100 w-fit">
+                    
+                    <button type="button" className="px-2 rounded-full text-lg bg-white disabled:opacity-30" onClick={() => setQuantity((prev) => Math.max(1, prev - 1))} disabled={quantity <= 1}>
+                        −
+                    </button>
+                    <span className="min-w-[24px] text-center">{quantity}</span>
+                    <button type="button" className="px-2 rounded-full text-lg bg-white disabled:opacity-30" onClick={() => setQuantity((prev) => Math.min(10, prev + 1))} disabled={quantity >= 10}>
+                        +
+                    </button>
+                    </div>
+
 
                 {/* pincode checker */}
                 <div className="mt-2">
@@ -219,42 +205,42 @@ function ProductDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Brand</h2>
-                    <p className="text-gray-500 text-md">{product.brand}</p>
+                    <p className="text-gray-500 text-md">{product.brand || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Materails</h2>
-                    <p className="text-gray-500 text-md">{product.materail}</p>
+                    <p className="text-gray-500 text-md">{product.materail || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Collections</h2>
-                    <p className="text-gray-500 text-md">{product.collections}</p>
+                    <p className="text-gray-500 text-md">{product.collections || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Dimensions ( Centimeter )</h2>
-                    <p className="text-gray-500 text-md">{product.dimensionscm}</p>
+                    <p className="text-gray-500 text-md">{product.dimensionscm || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Dimensions in ( Inches )</h2>
-                    <p className="text-gray-500 text-md">{product.dimensionsinch}</p>
+                    <p className="text-gray-500 text-md">{product.dimensionsinch || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Type</h2>
-                    <p className="text-gray-500 text-md">{product.type}</p>
+                    <p className="text-gray-500 text-md">{product.type || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Height (Inches)</h2>
-                    <p className="text-gray-500 text-md">{product.seatingheight}</p>
+                    <p className="text-gray-500 text-md">{product.seatingheight || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
                     <h2 className="text-md font-semibold text-gray-700">Weight</h2>
-                    <p className="text-gray-500 text-md">{product.weight}KG</p>
+                    <p className="text-gray-500 text-md">{product.weight || "Not Availabe"}KG</p>
                 </div>
             </div>
         </div>
@@ -289,12 +275,12 @@ function ProductDetail() {
 
             {/* related products section */}
             <div className="mx-5 md:mx-20 mt-10">
-                <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[50%] mt-1 border-red-500 rounded-2xl" /></h2>
+                <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[47%] mt-1 border-red-500 rounded-2xl" /></h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                     {relatedProducts.length > 0 ? (
                         relatedProducts.map((item) => (
                             <div key={item.id} className="shadow-md rounded-md overflow-hidden relative">
-                                <img src={item.image} alt={item.name} className="w-full h-48 object-cover transform transition duration-300 hover:scale-105" />
+                                <img src={item.image} alt={item.name} className="w-full h-48 object-cover transform transition duration-300 hover:scale-103" />
                                 <div className="p-4">
                                 <h5 className="text-lg font-semibold text-black truncate">{item.name}</h5>
                                 <div className="flex relative">
@@ -302,9 +288,7 @@ function ProductDetail() {
                                         <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {item.oldprice.toLocaleString("en-IN")}</p>
                                         <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{item.off}% off</p>
                                     </div>
-                                        <button onClick={() => addToCart(product, quantity)} className="absolute top-1.5 right-2 px-2 py-2 rounded-full bg-gray-100 opacity-85">
-                                            <IoCartOutline className="text-black transition duration-300 text-xl" />
-                                        </button>
+                                        
                                 <button
                                     onClick={() => navigate(`/category/${product.category}/product/${item.id}`)}
                                     className="mt-3 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
