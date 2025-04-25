@@ -12,65 +12,42 @@ export const AuthProvider = ({ children }) => {
     });
 
     const login = async (email, password) => {
-        
-
         try {
-            // Fetch only the user with the matching email
-            const response = await fetch(`http://localhost:5659/users?email=${email}`);
-            const users = await response.json();
-            
+            const response = await fetch("http://localhost:5655/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: "include"
+            });
 
-            if (users.length === 0) {
-                Swal.fire({
-                    title: "Error",
-                    text: "Invalid Email or Password",
-                    icon: "error"
-                });
+            const data = await response.json();
+
+            if (!response.ok) {
+                Swal.fire("Login Failed", data.message || "Invalid credentials", "error");
                 return;
             }
 
-            const foundUser = users[0]; // get the first user that matches
+            const { user, token } = data;
 
-            // Check if password matches
-            if (foundUser.password !== password) {
-                Swal.fire({
-                    title: "Error",
-                    text: "Invalid Email or Password",
-                    icon: "error"
-                });
-                return;
-            }
-
-            
-
-            const userData = {
-                id: foundUser.id,
-                email: foundUser.email,
-                name: foundUser.name,
-                role: foundUser.role || "user",
-                blocked: foundUser.blocked || false,
-                cart: foundUser.cart || [],
-                purchaseHistory: foundUser.purchaseHistory || [],
-            };
-
-            setUser(userData);
-            localStorage.setItem("user", JSON.stringify(userData));
+            setUser(user);
+            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("token", token); // Store token for future requests
             localStorage.setItem("isLoggedIn", "true");
 
-        // eslint-disable-next-line no-unused-vars
+            Swal.fire("Login Success", `Welcome ${user.name}`, "success");
         } catch (error) {
-            Swal.fire({
-                title: "Error",
-                text: "Error connecting to the server. Please try again later.",
-                icon: "error"
-            });
+            console.error("Login error:", error); // 👈 Helps see what went wrong
+            Swal.fire("Error", "Error connecting to the server. Please try again later.", "error");
         }
     };
 
     const logout = () => {
-        Swal.fire("Logout","Logout successfull","success")
+        Swal.fire("Logout", "Logout successful", "success");
         setUser(null);
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         localStorage.removeItem("isLoggedIn");
     };
 

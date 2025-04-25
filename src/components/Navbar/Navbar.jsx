@@ -93,7 +93,7 @@ const Navbar = () => {
                     {/* Conditional rendering for login dropdown */}
                     {!user ? (
                         <Link to='/login' className="z-20">
-                            <button className={`cursor-pointer hidden md:block px-4 bg-[#343434]  py-2 rounded-3xl ${scrolled ? 'text-white':''} hover:bg-[#2d9596] hover:text-white`}>
+                            <button className={`cursor-pointer hidden md:block px-4 bg-white  py-2 rounded-3xl ${scrolled ? 'text-white':''} hover:bg-[#2d9596] hover:text-white`}>
                                 Login
                             </button>
                         </Link>

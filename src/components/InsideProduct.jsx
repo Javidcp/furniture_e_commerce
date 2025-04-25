@@ -15,10 +15,10 @@ function ProductDetail() {
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [pincode, setPincode] = useState("");
-    const [availability, setAvailability] = useState(null);
-    const [checking, setChecking] = useState(false);
-    const [pincodeError, setPincodeError] = useState("");
+    // const [pincode, setPincode] = useState("");
+    // const [availability, setAvailability] = useState(null);
+    // const [checking, setChecking] = useState(false);
+    // const [pincodeError, setPincodeError] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [openIndex, setOpenIndex] = useState(null);
     const navigate = useNavigate()
@@ -35,9 +35,9 @@ function ProductDetail() {
         { title: "Does it heat up the body if we sit for a long duration?", content: `No, the ${product.category} does not heat up even if you lounge all day long!` },
     ];
 
-    const handleQuantityChange = (e) => {
-        setQuantity(Number(e.target.value));
-    };
+    // const handleQuantityChange = (e) => {
+    //     setQuantity(Number(e.target.value));
+    // };
 
     const API = `http://localhost:5659/products/${id}`; // correct API URL
 
@@ -58,31 +58,31 @@ function ProductDetail() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
-    const handleCheckPincode = async () => {
-        if (!pincode.match(/^\d{6}$/)) {
-            setPincodeError("Please enter a valid 6-digit pincode.");
-            return;
-        }
+    // const handleCheckPincode = async () => {
+    //     if (!pincode.match(/^\d{6}$/)) {
+    //         setPincodeError("Please enter a valid 6-digit pincode.");
+    //         return;
+    //     }
     
-        setChecking(true);  //API req in progress
-        setPincodeError("");    //clear prev error
-        setAvailability(null);  //reset the availability
+    //     setChecking(true);  //API req in progress
+    //     setPincodeError("");    //clear prev error
+    //     setAvailability(null);  //reset the availability
     
-        try {
-            const response = await axios.get(`http://localhost:5659/pincodes?pincode=${pincode}`);
+    //     try {
+    //         const response = await axios.get(`http://localhost:5659/pincodes?pincode=${pincode}`);
             
-            if (response.data.length > 0) {
-                setAvailability(response.data[0].available);
-            } else {
-                setAvailability(false);
-            }
-        } catch (error) {
-            console.error("Pincode Check Error:", error.message);
-            setPincodeError("Error checking pincode. Try again later.");
-        }
+    //         if (response.data.length > 0) {
+    //             setAvailability(response.data[0].available);
+    //         } else {
+    //             setAvailability(false);
+    //         }
+    //     } catch (error) {
+    //         console.error("Pincode Check Error:", error.message);
+    //         setPincodeError("Error checking pincode. Try again later.");
+    //     }
     
-        setChecking(false);
-    };
+    //     setChecking(false);
+    // };
 
     // 4 product showing related
     const [relatedProducts, setRelatedProducts] = useState([]); // for related product
@@ -134,9 +134,11 @@ function ProductDetail() {
                 <p className="text-gray-600">{product.shortname}</p>
                 <p className="text-lg text-gray-500 font-semibold">{product.name}</p>
 
+                <br /><br />
+
                 {/* price details */}
                 <div className="mt-1.5 mb-1.5">
-                    <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-sm px-2">₹ {product.oldprice.toLocaleString("en-IN")}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
+                    <p className="text-2xl font-semibold text-black">₹ {product.price.toLocaleString("en-IN")}<span className="text-gray-500 line-through text-[15px] font-light px-2">₹ {product.oldprice.toLocaleString("en-IN")}</span><span className="text-xs text-gray-500 font-normal">( Incl of all Taxes ) </span></p>
                     
                     <p className="text-green-600 font-medium">{product.off || 0}% off</p>
                 </div>
@@ -144,21 +146,23 @@ function ProductDetail() {
 
                 <span className="flex text-sm border mb-3 max-w-[95px] px-2 py-1 mt-2 rounded border-gray-400 text-gray-500 relative">{product.ratingstar || "0.0"} <FaStar className="mt-1 ml-1 mr-3 text-amber-300" /> <span className="absolute left-[50%] right-[50%] top-0.5"> | </span> {product.rating || 0}</span>
 
+                <br /><br />
+
                 {/* quatity */}
-                <div className="flex items-center p-1 rounded-full bg-gray-100 w-fit">
+                <div className="flex items-center p-1.5 rounded-full bg-gray-100 text-gray-700 gap-1.5 w-fit">
                     
-                    <button type="button" className="px-2 rounded-full text-lg bg-white disabled:opacity-30" onClick={() => setQuantity((prev) => Math.max(1, prev - 1))} disabled={quantity <= 1}>
+                    <button type="button" className="px-1.5 rounded-full text-lg bg-white disabled:opacity-50" onClick={() => setQuantity((prev) => Math.max(1, prev - 1))} disabled={quantity <= 1}>
                         −
                     </button>
-                    <span className="min-w-[24px] text-center">{quantity}</span>
-                    <button type="button" className="px-2 rounded-full text-lg bg-white disabled:opacity-30" onClick={() => setQuantity((prev) => Math.min(10, prev + 1))} disabled={quantity >= 10}>
+                    <span className="min-w-[20px] text-center">{quantity === 10 ? '': '0'}{quantity}</span>
+                    <button type="button" className="px-1.5 rounded-full text-lg bg-white disabled:opacity-50" onClick={() => setQuantity((prev) => Math.min(10, prev + 1))} disabled={quantity >= 10}>
                         +
                     </button>
                     </div>
 
 
                 {/* pincode checker */}
-                <div className="mt-2">
+                {/* <div className="mt-2">
                     <h3 className="text-lg font-semibold mb-2">Check Delivery Availability</h3>
                     <div className="flex gap-2">
                         <input
@@ -183,13 +187,13 @@ function ProductDetail() {
                             {availability ? "Delivery Available ✅" : "Not Available ❌"}
                         </p>
                     )}
-                </div>
+                </div> */}
 
                 
 
 
                 {/* add to cart button */}
-                <button onClick={() => addToCart(product, quantity)} className="w-full mt-6 bg-red-600 text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
+                <button onClick={() => addToCart(product, quantity)} className="w-full mt-4 bg-[#2d9596] text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
                     <IoCartOutline className="text-2xl" />
                     Add To Cart
                 </button>
