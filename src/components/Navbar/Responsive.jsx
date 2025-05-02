@@ -53,23 +53,20 @@ const Responsive = ({ showMenu, setShowMenu }) => {
                 {/* Navigation */}
                 <nav className="mt-10">
                     <ul className="flex flex-col space-y-2 text-sm">
-                        <Link to="/"><li className="text-red-500 font-semibold">HOME</li></Link>
-                        <Link to="/about"><li className="uppercase hover:text-red-500">About</li></Link>
-                        <Link to="/contact"><li className="uppercase hover:text-red-500">Contact</li></Link>
-                        <Link to="/sofa"><li className="uppercase hover:bg-gray-100">Sofa</li></Link>
-                        <Link to="/bed"><li className="uppercase hover:bg-gray-100">Bed</li></Link>
-                        <Link to="/wardrobe"><li className="uppercase hover:bg-gray-100">Wardrobe</li></Link>
-                        <Link to="/chair"><li className="uppercase hover:bg-gray-100">Chair</li></Link>
-                        <Link to="/table"><li className="uppercase hover:bg-gray-100">Table</li></Link>
-                        <Link to="/cabinets"><li className="uppercase hover:bg-gray-100">Cabinet</li></Link>
-                        <Link to="/homedecors"><li className="uppercase hover:bg-gray-100">Home Decors</li></Link>
-                        <Link to="/cushions"><li className="uppercase hover:bg-gray-100">Cushion</li></Link>
+                        <Link to="/"><li className="text-red-500 font-semibold p-1 border-b border-gray-200">HOME</li></Link>
                         
                         {user && (
-                            <Link to="/orderhistory">
-                                <li className="uppercase font-semibold">My Orders</li>
+                            <>
+                            <Link to="/orderhistory" >
+                                <li className="uppercase font-semibold p-1 border-b border-gray-200">My Orders</li>
                             </Link>
+                            <Link to='/wishlist' className="text-black bg-white rounded-full  border-0 outline-0 relative">
+                                <li className="uppercase font-semibold p-1 border-b border-gray-200">Wishlist</li>
+                            </Link>
+                            </>
                         )}
+                        <Link to="/about"><li className="uppercase hover:bg-gray-200 p-1 border-b border-gray-200">About</li></Link>
+                        <Link to="/contact"><li className="uppercase hover:bg-gray-200 p-1 border-b border-gray-200">Contact</li></Link>
                     </ul>
                 </nav>
             </div>

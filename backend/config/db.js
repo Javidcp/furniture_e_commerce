@@ -1,13 +1,22 @@
 import mongoose from "mongoose";
 
+
+
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL);
-    console.log("MongoDB connected successfully");
-  } catch (error) {
-    console.error("MongoDB connection failed:", error.message);
+    // eslint-disable-next-line no-undef
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB Connected...');
+  } catch (err) {
+    console.error(err.message);
+    // eslint-disable-next-line no-undef
     process.exit(1);
   }
 };
+
+
 
 export default connectDB;

@@ -6,7 +6,6 @@ import Bed from "./pages/shop/Bed"
 import Sofa from "./pages/shop/Sofa"
 import Cart from "./pages/Cart"
 import './App.css'
-import { AuthProvider } from './components/Authentication/AuthContext.jsx'
 import ProductDetail from './components/InsideProduct'
 import { CartProvider } from './components/cart/CartContext'
 import Table from './pages/shop/Table'
@@ -23,6 +22,7 @@ import Error from './pages/Error'
 import Login from './components/Login or signup/Login'
 import AdminPanel from './components/Admin/AdminPanel.jsx'
 import ProtectedRoute from './components/Admin/ProtectedRoute'
+import { useAuth } from './components/Authentication/useAuth.jsx'
 
 import Users from './components/Admin/Users.jsx'
 import Products from './components/Admin/Products.jsx'
@@ -34,6 +34,10 @@ import EditProduct from './components/Admin/EditProduct.jsx'
 import AddProduct from './components/Admin/AddProduct.jsx'
 import OrderDetail from './components/Admin/OrderDetail.jsx'
 import SearchButton from './components/Navbar/SearchButton.jsx'
+import Wishlist from './pages/Wishlist.jsx'
+import { WishlistProvider } from './components/wishlist/wishlistContext.jsx'
+import Success from './pages/Success.jsx'
+import Failed from './pages/Failed.jsx'
 
 
 
@@ -50,14 +54,18 @@ const router = createHashRouter([
     { path: '/bed', element: <Bed /> },
     { path: '/sofa', element: <Sofa /> },
     { path: '/cart', element: <Cart /> },
+    { path: '/wishlist', element: <Wishlist /> },
     { path: '/login', element: <Login /> },
     { path: '/payment', element: <Payment /> },
     { path: '/orderhistory', element: <OrderHistory /> },
     { path: '/about', element: <About /> },
     { path: '/contact', element: <Contact /> },
     { path: '/category/:category/product/:id', element: <ProductDetail /> },
-    { path: '/search', element: <SearchButton />}
+    { path: '/search', element: <SearchButton />},
+    
   ]},
+  { path: '/success', element: <Success />},
+  { path: '/failed', element: <Failed />},
   { path: '/dashboard', element: <ProtectedRoute><AdminPanel /></ProtectedRoute>, errorElement: <Error /> , children: [
       { path: '', element: <Dashboard /> },
       { path: 'users', element: <Users /> },
@@ -73,19 +81,22 @@ const router = createHashRouter([
 
 
 
-function App() {
-
+function App() { 
+  const { user } = useAuth();
+  const userEmail = user?.email;
 
   return (
     <>
-      <AuthProvider>
+        
+      <WishlistProvider userEmail={userEmail}>
           <CartProvider>
             <RouterProvider router={router} />
           </CartProvider>
-      </AuthProvider>
-
+      </WishlistProvider>
+        
     </>
-  )
+  );
 }
+
 
 export default App

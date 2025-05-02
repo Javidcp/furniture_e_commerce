@@ -105,7 +105,7 @@ const OrderHistory = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 mt-20 bg-white shadow-lg rounded-lg">
+        <div className="max-w-4xl mx-auto p-6 mt-20 bg-white rounded-lg min-h-[34.3vh]">
             <h2 className="text-2xl font-bold mb-4 text-center">Order History</h2>
             {orders.length === 0 ? (
                 <p className="text-gray-500 text-center">No past orders found.</p>

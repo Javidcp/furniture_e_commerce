@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import axios from "axios";
 import { IoCartOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
@@ -8,21 +8,20 @@ import van from '../assets/van.svg'
 import warranty from '../assets/warranty.svg'
 import installation from '../assets/installation.svg'
 import { CartContext } from "./cart/CartContext";
-
+import { useWishlist } from "./wishlist/wishlistContext";
+import { GoHeart, GoHeartFill  } from "react-icons/go";
 
 function ProductDetail() {
-    const { id } = useParams(); // get product ID from URL
+    const { id } = useParams(); 
+    const navigate = useNavigate()
+    const { addToCart } = useContext(CartContext);
+    
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    // const [pincode, setPincode] = useState("");
-    // const [availability, setAvailability] = useState(null);
-    // const [checking, setChecking] = useState(false);
-    // const [pincodeError, setPincodeError] = useState("");
     const [quantity, setQuantity] = useState(1);
+    const [relatedProducts, setRelatedProducts] = useState([]);
     const [openIndex, setOpenIndex] = useState(null);
-    const navigate = useNavigate()
-    const { addToCart } = useContext(CartContext);
 
     const toggleAccordion = (index) => {
         setOpenIndex(openIndex === index ? null : index);
@@ -35,85 +34,60 @@ function ProductDetail() {
         { title: "Does it heat up the body if we sit for a long duration?", content: `No, the ${product.category} does not heat up even if you lounge all day long!` },
     ];
 
-    // const handleQuantityChange = (e) => {
-    //     setQuantity(Number(e.target.value));
-    // };
 
-    const API = `http://localhost:5659/products/${id}`; // correct API URL
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await axios.get(API);
-                setProduct(response.data);
-            } catch (err) {
-                setError(err.message || "Something went wrong");
-            } finally {
-                setLoading(false);
-            }
-        };
+    const API = `http://localhost:5655`; 
 
-        fetchProduct();
-        
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id]);
-
-    // const handleCheckPincode = async () => {
-    //     if (!pincode.match(/^\d{6}$/)) {
-    //         setPincodeError("Please enter a valid 6-digit pincode.");
-    //         return;
-    //     }
-    
-    //     setChecking(true);  //API req in progress
-    //     setPincodeError("");    //clear prev error
-    //     setAvailability(null);  //reset the availability
-    
-    //     try {
-    //         const response = await axios.get(`http://localhost:5659/pincodes?pincode=${pincode}`);
+    const fetchProducts = useCallback(async () => {
+        try {
+            const response = await axios.get(`${API}/products/${id}`)
+            setProduct(response.data)
+            return response.data.category;
+        } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch product details")
             
-    //         if (response.data.length > 0) {
-    //             setAvailability(response.data[0].available);
-    //         } else {
-    //             setAvailability(false);
-    //         }
-    //     } catch (error) {
-    //         console.error("Pincode Check Error:", error.message);
-    //         setPincodeError("Error checking pincode. Try again later.");
-    //     }
+        } finally {
+            setLoading(false)
+        }
+    }, [id])
+
+
     
-    //     setChecking(false);
-    // };
 
-    // 4 product showing related
-    const [relatedProducts, setRelatedProducts] = useState([]); // for related product
-
-    useEffect(() => {
-        const fetchRelatedProducts = async () => {
+    
+        const fetchRelatedProducts = useCallback(async (category) => {
             try {
-                const response = await axios.get(`http://localhost:5659/products?category=${product.category}`);
-                const filteredProducts = response.data.filter((p) => p.id !== product.id).slice(0, 4);
+                const response = await axios.get(`${API}/products?category=${category}`);
+                const filteredProducts = response.data.filter((p) => p._id !== id).slice(0, 4);
                 setRelatedProducts(filteredProducts);
             } catch (err) {
                 console.error("Error fetching related products:", err);
             }
-        };
+        }, [id]); 
+        
 
-        if (product.category) {
-            fetchRelatedProducts();
-        }
-    }, [product.category, product.id]); 
+        useEffect(() => {
+            const loadData = async () => {
+                try {
+                    const category = await fetchProducts()
+                    if (category) {
+                        await fetchRelatedProducts(category)
+                    }
+                } catch (err) {
+                    console.error("Data loading error", err)
+                }
+            }
+            loadData()
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }, [id, fetchProducts, fetchRelatedProducts])
 
-
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }, [id]); // scroll to top when ID changes
+        const { toggleWishlist, isInWishlist } = useWishlist()
 
     
 
     if (loading) return <div className="text-center text-xl">Loading product...</div>;
     if (error) return <div className="text-center text-xl text-red-500">Error: {error}</div>;
-    if (!product?.id) return <div className="text-center text-xl text-red-500">Product not found.</div>;    //optional chaining safely access nested properties without causing errors
-
+    if (!product?._id) return <div>Product not found.</div>
 
     
 
@@ -160,43 +134,19 @@ function ProductDetail() {
                     </button>
                     </div>
 
-
-                {/* pincode checker */}
-                {/* <div className="mt-2">
-                    <h3 className="text-lg font-semibold mb-2">Check Delivery Availability</h3>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            placeholder="Enter Pincode"
-                            value={pincode}
-                            onChange={(e) => setPincode(e.target.value)}
-                            className="w-full p-2 border rounded"
-                        />
-                        <button
-                            onClick={handleCheckPincode}
-                            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                            disabled={checking}
-                        >
-                            {checking ? "Checking..." : "Check"}
-                        </button>
-                    </div>
-
-                    {pincodeError && <p className="text-red-500 mt-2">{pincodeError}</p>}
-                    {availability !== null && (
-                        <p className={`mt-2 ${availability ? "text-green-500" : "text-red-500"}`}>
-                            {availability ? "Delivery Available ✅" : "Not Available ❌"}
-                        </p>
-                    )}
-                </div> */}
-
                 
 
 
                 {/* add to cart button */}
-                <button onClick={() => addToCart(product, quantity)} className="w-full mt-4 bg-[#2d9596] text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-red-700 transition duration-300">
-                    <IoCartOutline className="text-2xl" />
-                    Add To Cart
-                </button>
+                <div className="grid grid-cols-2 mt-2 gap-2">
+                    <button onClick={() => toggleWishlist(product)} className="flex justify-center items-center hover:bg-gray-200 bg-gray-100 text-black  gap-2 rounded-lg">
+                        {isInWishlist(product._id) ? <GoHeartFill className='text-red-700' size={18} /> : <GoHeart size={18} />} Wishlist
+                    </button>
+                    <button onClick={() => addToCart(product, quantity)} className="w-full bg-[#2d9596] text-white py-3 rounded-lg flex justify-center items-center gap-2 text-lg hover:bg-[#1f6869] transition duration-300">
+                        <IoCartOutline className="text-2xl" />
+                        Add To Cart
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -213,8 +163,8 @@ function ProductDetail() {
                 </div>
 
                 <div className="my-3">
-                    <h2 className="text-md font-semibold text-gray-700">Materails</h2>
-                    <p className="text-gray-500 text-md">{product.materail || "Not Availabe"}</p>
+                    <h2 className="text-md font-semibold text-gray-700">Materials</h2>
+                    <p className="text-gray-500 text-md">{product.material || "Not Availabe"}</p>
                 </div>
 
                 <div className="my-3">
@@ -279,32 +229,16 @@ function ProductDetail() {
 
             {/* related products section */}
             <div className="mx-5 md:mx-20 mt-10">
-                <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[47%] mt-1 border-red-500 rounded-2xl" /></h2>
+                <h2 className="text-2xl font-semibold mb-6 inline-block">You May Also Like <hr className="border-2 w-[47%] mt-1 border-[#2d9596] rounded-2xl" /></h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    {relatedProducts.length > 0 ? (
-                        relatedProducts.map((item) => (
-                            <div key={item.id} className="shadow-md rounded-md overflow-hidden relative">
-                                <img src={item.image} alt={item.name} className="w-full h-48 object-cover transform transition duration-300 hover:scale-103" />
-                                <div className="p-4">
-                                <h5 className="text-lg font-semibold text-black truncate">{item.name}</h5>
-                                <div className="flex relative">
-                                        <p className="text-black mt-2">₹ {item.price.toLocaleString("en-IN")}</p>
-                                        <p className="text-gray-500 mt-3.5 ml-2 line-through text-xs">₹ {item.oldprice.toLocaleString("en-IN")}</p>
-                                        <p className='absolute right-0.5 bottom-0 text-xs text-green-800 font-medium'>{item.off}% off</p>
-                                    </div>
-                                        
-                                <button
-                                    onClick={() => navigate(`/category/${product.category}/product/${item.id}`)}
-                                    className="mt-3 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
-                                >
-                                    View Details
-                                </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No related products found.</p>
-                    )}
+                {relatedProducts.map((relatedProduct) => (
+                        <div key={relatedProduct.id} className="border border-gray-200 p-4 rounded-lg">
+                            <img src={relatedProduct.image} alt={relatedProduct.shortname} className="w-full h-40 object-cover rounded-lg mb-3" />
+                            <p className="font-semibold">{relatedProduct.shortname}</p>
+                            <p className="text-gray-500">₹ {relatedProduct.price?.toLocaleString("en-IN")}</p>
+                            <button onClick={() => navigate(`/product/${relatedProduct.id}`)} className="mt-2 w-full bg-[#2d9596] text-white py-2 rounded-lg">View Details</button>
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -312,7 +246,7 @@ function ProductDetail() {
 
             {/* accordion */}
             <div className="px-15 my-10">
-                <h2 className="text-3xl font-semibold inline-block" style={{fontFamily : 'monospace'}}>FAQ <hr className="w-[70%] border-2 border-red-500 rounded-sm" /></h2>
+                <h2 className="text-3xl font-semibold inline-block" style={{fontFamily : 'monospace'}}>FAQ <hr className="w-[70%] border-2 border-[#2d9596] rounded-sm" /></h2>
                 <div className="mt-5 space-y-2">
                     {items.map((item, index) => (
                         <div key={index} className="border-b-1 overflow-hidden">

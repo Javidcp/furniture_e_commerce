@@ -22,9 +22,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log("Login attempt:", { email, password });
     const user = await User.findOne({ email });
-    console.log("Found:", user);
     if (!user) return res.status(404).json({ message: "User not found", email });
 
     if (user.blocked) return res.status(403).json({ message: "Account is blocked" });

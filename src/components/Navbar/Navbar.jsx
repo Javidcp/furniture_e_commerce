@@ -6,27 +6,31 @@ import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
 import Responsive from "../Navbar/Responsive";
 import { CartContext } from "../cart/CartContext";
-import { AuthContext } from "../Authentication/AuthContext"; // Import AuthContext
+import { useWishlist } from '../wishlist/wishlistContext'
+import { AuthContext } from "../Authentication/AuthContext";
 import Swal from "sweetalert2";
 import SearchButton from "./SearchButton";
+import { GoHeart } from "react-icons/go";
+
 
 import "@fontsource/montserrat";
 
 
 const Navbar = () => {
     const { cart } = useContext(CartContext);
-    const authContext = useContext(AuthContext); // Check if context exists
+    const authContext = useContext(AuthContext);
     const [showMenu, setShowMenu] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
+    const { wishlist } = useWishlist()
 
 
 
     useEffect(() => {
         const handleScroll = () => {
-        setScrolled(window.scrollY > 50);
+        setScrolled(window.scrollY > 0);
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -56,7 +60,7 @@ const Navbar = () => {
         
         <div className={`fixed  ${scrolled ? 'bg-[#f5f5f5] shadow-md': ''} w-full z-40 top-0 `} style={{ fontFamily: 'sans-serif' }}>
             <div className="max-w-7xl mx-auto py-3 px-2 flex justify-between items-center">
-                <Link to="/"><div className={`text-2xl font-extrabold ${scrolled ? 'text-black':''}`}>HOME<span className="text-[#2d9596]">HAVEN</span></div></Link>
+                <Link to="/"><div className={`text-2xl font-extrabold ${scrolled ? 'text-black':''}`}>HOME<span className="text-[#2d9596]">HEAVEN</span></div></Link>
 
                 <div className=" items-center gap-5 hidden lg:block">
                     <nav>
@@ -89,11 +93,23 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-5 text-xs lg:text-sm ">
                 <SearchButton />
+
+                    {
+                        user &&
+                        <Link to='/wishlist' className="text-black hidden lg:block bg-white rounded-full p-2 border-0 outline-0 relative">
+                            <GoHeart size={18} />
+                            {wishlist.length > 0 && user && (
+                            <div className="bg-red-500 w-3 h-3.5 absolute -top-1 right-0 text-[10px] text-center rounded-full text-white">
+                                {wishlist.length}
+                            </div>
+                        )}
+                        </Link>
+                    }
                     
                     {/* Conditional rendering for login dropdown */}
                     {!user ? (
                         <Link to='/login' className="z-20">
-                            <button className={`cursor-pointer hidden md:block px-4 bg-white  py-2 rounded-3xl ${scrolled ? 'text-white':''} hover:bg-[#2d9596] hover:text-white`}>
+                            <button className={`cursor-pointer hidden md:block px-4 bg-white  py-2 rounded-3xl hover:bg-[#2d9596] hover:text-white`}>
                                 Login
                             </button>
                         </Link>

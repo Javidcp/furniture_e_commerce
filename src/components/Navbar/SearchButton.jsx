@@ -54,7 +54,7 @@ const SearchButton = () => {
                     />
                 )}
                 <button
-                    className={`absolute right-[0px] top-[-17px] text-white bg-black p-1.5 rounded-full ${showInput === true ? 'top-[2px] right-[1px]': ''}`}
+                    className={`absolute right-[0px] top-[-17px] text-white bg-black p-1.5 rounded-full ${showInput === true ? 'top-[0px] right-[0px]': ''}`}
                     onClick={() => setShowInput((prev) => !prev)}
                 >
                     <IoSearchSharp size={20} />

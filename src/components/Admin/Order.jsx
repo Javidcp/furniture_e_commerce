@@ -43,8 +43,6 @@ const Order = () => {
 
         // update the order status
         const handleStatusChange = async (orderId, userId, newStatus) => {
-            console.log(`Updating order ${orderId} for user ${userId} to status: ${newStatus}`);
-        
             try {
                 const userResponse = await axios.get(`http://localhost:5659/users/${userId}`);
                 const user = userResponse.data;
@@ -68,8 +66,6 @@ const Order = () => {
                         order.orderId === orderId ? { ...order, status: newStatus } : order
                     )
                 );
-        
-                console.log(`Order ${orderId} successfully updated to ${newStatus}`);
             } catch (error) {
                 console.error("Error updating order status:", error);
             }
