@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-
-
 const connectDB = async () => {
   try {
     // eslint-disable-next-line no-undef
@@ -16,7 +14,5 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-
-
 
 export default connectDB;
