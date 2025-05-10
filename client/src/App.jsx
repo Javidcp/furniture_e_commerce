@@ -1,5 +1,5 @@
 import './App.css'
-import { createHashRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import RootLayout from "./pages/RootLayout"
 import Home from "./pages/Home"
 import Bed from "./pages/shop/Bed"
@@ -42,7 +42,7 @@ import Failed from './pages/Failed.jsx'
 
 
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {path: '', element: <RootLayout />, errorElement: <Error /> , children: [
     { path: '/', element: <Home /> },
     { path: '/table', element: <Table /> },

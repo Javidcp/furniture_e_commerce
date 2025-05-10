@@ -74,18 +74,18 @@ export const updateProduct = async (req, res, next) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ success: false, message: 'Invalid product ID' });
+    return res.status(400).json({ success: false, message: 'Invalid product ID' });
   }
 
   try {
-      const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updatedProduct) {
-          return res.status(404).json({ success: false, message: 'Product not found' });
-      }
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+    if (!updatedProduct) {
+        return res.status(404).json({ success: false, message: 'Product not found' });
+    }
 
-      res.status(200).json(updatedProduct);
+    res.status(200).json(updatedProduct);
   } catch (error) {
-      next(error);
+    next(error);
   }
 };
 

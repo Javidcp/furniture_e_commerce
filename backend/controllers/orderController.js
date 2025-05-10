@@ -4,9 +4,7 @@ import Product from "../models/product.js";
 import mongoose from 'mongoose';
 
 
-// create Order
 export const createOrder = async (req, res, next) => {
-  
     const { items, totalAmount, shippingAddress, paymentMethod } = req.body;
     const userId = req.user.id
   
@@ -64,13 +62,13 @@ export const createOrder = async (req, res, next) => {
         });
       }
 
-    const itemsWithImages = await Promise.all(items.map(async (item) => {
+      const itemsWithImages = await Promise.all(items.map(async (item) => {
       const product = await Product.findById(item.productId);
-      return {
-        ...item,
-        image: product?.image || "",
-      };
-    }));
+        return {
+          ...item,
+          image: product?.image || "",
+        };
+      }));
 
     const newOrder = new Order({
       userId,
@@ -100,7 +98,9 @@ export const createOrder = async (req, res, next) => {
   }
 };
 
-// orders of specific user
+
+
+
 export const getUserOrders = async (req, res, next) => {
   try {
     const requestedUserId = req.params.userId;
@@ -137,60 +137,7 @@ export const getUserOrders = async (req, res, next) => {
 };
 
 
-// export const updateOrderPaymentStatus = async (req, res, next) => {
-//   const { paymentStatus } = req.body;
-//   const { orderId } = req.params;
-  
-//   const validStatuses = ['pending', 'processing', 'paid', 'failed', 'refunded'];
-//   if (!validStatuses.includes(paymentStatus)) {
-//     return res.status(400).json({
-//       success: false,
-//       message: 'Invalid payment status',
-//       validStatuses
-//     });
-//   }
-  
-//   try {
-//     const order = await Order.findById(orderId).populate('userId');  
-//     if (!order) {
-//       return  next(new Error('Order not found'))
-//       ;
-//     }
 
-//     if (!req.user || (req.user.role !== 'admin' && order.userId._id?.toString() !== req.user.id.toString())) {
-//       return  next(new Error('Not authorized to update this order'))
-//     }
-
-//     if (order.paymentStatus === 'paid' && paymentStatus !== 'refunded') {
-//       return  next(new Error('Cannot modify status of an already paid order unless refunding'))
-//     }
-
-//     if (order.paymentMethod === 'Cash on Delivery' && paymentStatus === 'pending' && order.orderStatus !== 'delivered') {
-//       return  next(new Error('Cannot mark COD order as paid before it is delivered'))
-//     }
-
-//     if (paymentStatus === 'paid' && order.paymentMethod === 'Cash on Delivery' && order.orderStatus === 'delivered') {
-//       order.paymentStatus = 'paid';
-//     } else if (paymentStatus !== 'paid') {
-//       order.paymentStatus = paymentStatus;
-//     }
-
-//     if (paymentStatus === 'paid' && order.paymentMethod === 'Cash on Delivery') {
-//       order.orderStatus = 'processing';
-//     }
-
-//     await order.save();
-
-//     res.status(200).json({
-//       success: true,
-//       message: 'Payment status updated successfully',
-//       order
-//     });
-
-//   } catch (error) {
-//     next(error)
-//   }
-// };
 
 export const updateOrderPaymentStatus = async (req, res, next) => {
   try {
@@ -253,6 +200,10 @@ export const getAllOrders = async (req, res) => {
 };
 
 
+
+
+
+
 export const updateOrderStatus = async (req, res, next) => {
   const { orderId } = req.params;
   const { orderStatus } = req.body;
@@ -293,6 +244,7 @@ export const updateOrderStatus = async (req, res, next) => {
 
 
 
+
 export const cancelOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -311,6 +263,7 @@ export const cancelOrder = async (req, res, next) => {
     next(error)
   }
 }
+
 
 
 export const getOrderById = async (req, res, next) => {

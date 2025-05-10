@@ -111,14 +111,14 @@ const Payment = () => {
 
     const handlePayment = async () => {
         if (!validateForm()) return;
-
         setIsProcessing(true);
 
         try {
             const order = await createOrderRecord();
 
             if (method === "Stripe") {
-                const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+                const stripe = await loadStripe(import.meta.env.STRIPE_PUBLISHABLE);
+                
                 const response = await axios.post(
                     `http://localhost:5655/api/payment/create-checkout-session`,
                     { 

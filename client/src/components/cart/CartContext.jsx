@@ -13,7 +13,12 @@ export function CartProvider({ children }) {
 
     useEffect(() => {
         if (user) {
-            axios.get(`http://localhost:5655/api/user/cart/${user._id}`)
+            const token = localStorage.getItem("token")
+            axios.get(`http://localhost:5655/api/user/cart/${user._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+                })
                 .then((response) => {
                     setCart(response.data.cart);
                 })

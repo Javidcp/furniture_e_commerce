@@ -42,13 +42,13 @@ export const createCheckoutSession = async (req, res, next) => {
             payment_method_types: ['card'],
             line_items,
             mode: 'payment',            
-            success_url: `http://localhost:5173/furniture_e_commerce/#/success/${orderId}`,
-            cancel_url: `http://localhost:5173/furniture_e_commerce/#/failed/${orderId}`,
+            success_url: `http://localhost:5173/furniture_e_commerce/success/${orderId}`,
+            cancel_url: `http://localhost:5173/furniture_e_commerce/failed`,
             metadata: { orderId },
             customer_email: req.user.email
         });
 
-        res.json({ id: session.id });
+        res.json({ id: session.id,  url: session.url });
 
     } catch (error) {
         next(error)

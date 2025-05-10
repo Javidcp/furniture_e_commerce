@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import mongoose from "mongoose";
 
 export const addToCart = async (req, res, next) => {
   const { email, product } = req.body;
@@ -78,7 +79,10 @@ export const updateCart = async (req, res, next) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    user.cart = cart;
+    user.cart = cart.map(item => ({
+      productId: new mongoose.Types.ObjectId(item.productId),
+      quantity: item.quantity
+    }));
     await user.save();
     res.json({ message: "Cart updated", cart: user.cart });
   } catch (error) {
