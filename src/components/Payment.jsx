@@ -3,9 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../components/cart/CartContext";
 import { AuthContext } from "../components/Authentication/AuthContext";   
-import axios from "axios";
-import Swal from "sweetalert2";
 import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Payment = () => {
@@ -42,17 +43,17 @@ const Payment = () => {
         const isFormValid = requiredFields.every(field => formData[field] && formData[field].trim() !== '');
         
         if (!isFormValid) {
-            Swal.fire("Error", "Please fill all required fields", "error");
+            toast.error("Please fill all required fields");
             return false;
         }
         
         if (!method) {
-            Swal.fire("Error", "Please select a payment method", "error");
+            toast.error("Please select a payment method");
             return false;
         }
         
         if (cart.length === 0) {
-            Swal.fire("Error", "Your cart is empty", "error");
+            toast.error("Your cart is empty");
             return false;
         }
         
@@ -103,7 +104,7 @@ const Payment = () => {
     useEffect(() => {
         if (!token) {
             console.error("Token is missing. User might not be logged in.");
-            Swal.fire("Error", "Authentication token missing. Please log in again.", "error");
+            toast.error("Authentication token missing. Please log in again.");
             return;
         }
         
@@ -141,17 +142,11 @@ const Payment = () => {
                 setCart([]);
                 localStorage.removeItem(`cart_${user.email}`);
                 navigate(`/success/${order._id}`);
-                Swal.fire("Success", "Order placed successfully!", "success");
+                toast.success("Order placed successfully!");
             }
         } catch (error) {
             console.error("Payment error:", error);
-            Swal.fire(
-                "Error", 
-                error.response?.data?.message || 
-                error.message || 
-                "Payment processing failed", 
-                "error"
-            );
+            toast.error("Payment processing failed");
         } finally {
             setIsProcessing(false);
         }

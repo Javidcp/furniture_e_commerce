@@ -27,9 +27,10 @@ const SearchButton = () => {
         if (searchQuery.trim() === "") {
             setFilteredProducts([]);
         } else {
-            const filtered = products.filter((product) =>
-                product.name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+        const filtered = products.filter((product) =>
+        product.name && product.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
             setFilteredProducts(filtered);
         }
     }, [searchQuery, products]);
@@ -61,12 +62,15 @@ const SearchButton = () => {
                 </button>
             </div>
 
-            {showInput && searchQuery && filteredProducts.length > 0 && (
+            {filteredProducts.length > 0 && (
+                <>
                 <ul className="absolute px-2 z-50 bg-white w-screen ">
                     {filteredProducts.map((product) => (
+                        <>
+                        
                         <Link
-                            key={product.id}
-                            to={`/category/bed/product/${product._id}`}
+                            key={product._id}
+                            to={`/category/${product.category}/product/${product._id}`}
                             onClick={handleProductClick}
                         >
                             <li className="border-b px-2 py-1 flex gap-2">
@@ -76,8 +80,10 @@ const SearchButton = () => {
                                 <span className="text-black">{product.name}</span>
                             </li>
                         </Link>
+                        </>
                     ))}
                 </ul>
+                </>
             )}
         </div>
     );

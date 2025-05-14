@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/Authentication/AuthContext";
 import axios from "axios";
 import Swal from 'sweetalert2'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const OrderHistory = () => {
@@ -13,7 +16,7 @@ const OrderHistory = () => {
 
     useEffect(() => {
         if (!user || !token) {
-            Swal.fire("LogIn","You need to log in to view order history.","info");
+            toast.info("You need to log in to view order history.");
             navigate("/login");
             return;
         }

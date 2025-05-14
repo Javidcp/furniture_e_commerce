@@ -1,5 +1,8 @@
 import { createContext, useState } from "react";
-import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import api from "./api";
+
 
 export const AuthContext = createContext({
     user: null,
@@ -8,8 +11,8 @@ export const AuthContext = createContext({
     login: () => {},
     logout: () => {},
     fetchWithAuth: () => {}
-  });
-  
+});
+
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(() => {
@@ -23,22 +26,9 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await fetch("http://localhost:5655/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            });
+            const response = await api.post("/api/auth/login", { email, password })
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                Swal.fire("Login Failed", data.message || "Invalid credentials", "error");
-                return;
-            }
-
-            const { user, token } = data;
+            const { user, token } = response.data;
             console.log("authhhh", token);
             
 
@@ -49,15 +39,17 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem("token", token);
             localStorage.setItem("isLoggedIn", "true");
 
-            Swal.fire("Login Success", `Welcome ${user.name}`, "success");
+            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+            toast.success(`Login Success, Welcome ${user.name}`);
         } catch (error) {
             console.error("Login error:", error);
-            Swal.fire("Error", "Error connecting to the server. Please try again later.", "error");
+            toast.error( "Please try again later.");
         }
     };
 
     const logout = () => {
-        Swal.fire("Logout", "Logout successful", "success");
+        toast.success( "Logout successful");
         setUser(null);
         setToken(null);
         localStorage.removeItem("user");

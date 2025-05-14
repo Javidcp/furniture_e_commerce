@@ -1,9 +1,11 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline, MdDelete  } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -13,7 +15,12 @@ const Products = () => {
 
     const fetchProduct = async () => {
         try {
-            const response = await axios.get(`http://localhost:5655/products/all`)
+            const token = localStorage.getItem("token")
+            const response = await axios.get("http://localhost:5655/products/all", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             setProducts(response.data)
             setFilteredProduct(response.data)
             extractCategory(response.data)
@@ -44,44 +51,32 @@ const Products = () => {
         }
     }
 
-    // delete product
     const handleDelete = async (_id) => {
-        const result = await Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, keep it",
-            reverseButtons: true
-        });
-    
-        if (result.isConfirmed) {
+        
             try {
-                await axios.delete(`http://localhost:5655/products/${_id}`);
-                const updatedProducts = products.filter((product) => product._id !== _id);
+                const token = localStorage.getItem("token")
+                const response = await axios.patch(`http://localhost:5655/products/${_id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+                const updatedProduct = response.data.product;
+                const updatedProducts = products.map((product) =>
+                    product._id === _id ? updatedProduct : product
+                );
                 setProducts(updatedProducts);
     
-                setFilteredProduct(
-                    selectedCategory === "All Category"
-                        ? updatedProducts
-                        : updatedProducts.filter((p) => p.category === selectedCategory)
-                );
+                const newFiltered = selectedCategory === "All Category"
+                    ? updatedProducts
+                    : updatedProducts.filter((p) => p.category === selectedCategory);
+                setFilteredProduct(newFiltered);
 
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "The product has been deleted.",
-                    icon: "success"
-                });
+                toast.success(updatedProduct.isDelete ? "The product has been soft-deleted." : "The product has been restored.")
             } catch (error) {
                 console.error("Error deleting product", error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "There was a problem deleting the product.",
-                    icon: "error"
-                });
+                toast.error("There was a problem deleting the product")
             }
-        }
+        
     }
 
     return (
@@ -130,14 +125,14 @@ const Products = () => {
                                 </div>
                             </td>
                             <td className="p-1.5 text-center">{product.category}</td>
-                            <td className="p-1 min-w-[80px]">₹ {product.price.toLocaleString("en-IN")}</td>
+                            <td className="p-1 min-w-[80px]">₹ {product.price}</td>
                             <td className="p-1.5 text-center ">
                                 <div className="flex items-center justify-center space-x-3">
                                     <Link to={`/dashboard/products/${product._id}`} className="text-blue-400 cursor-pointer">
                                         <FaRegEye size={18} />
                                     </Link>
-                                    <button onClick={() => handleDelete(product._id)} className="text-red-600">
-                                        <MdDeleteOutline size={18} />
+                                    <button onClick={() => handleDelete(product._id)} >
+                                        { product.isDelete ? <MdDelete className="text-green-600" size={18} /> : <MdDeleteOutline className="text-red-600" size={18} /> }
                                     </button>
                                 </div>
                             </td>

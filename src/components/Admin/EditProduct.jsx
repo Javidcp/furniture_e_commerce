@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditProduct = () => {
     const { id } = useParams();
@@ -34,7 +35,12 @@ const EditProduct = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:5655/products/${id}`);
+                const token = localStorage.getItem("token")
+                const response = await axios.get(`http://localhost:5655/products/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setProduct(response.data);
             } catch (error) {
                 console.log("Error fetching product:", error);
@@ -53,13 +59,10 @@ const EditProduct = () => {
         e.preventDefault();
         try {
             await axios.put(`http://localhost:5655/products/${id}`, product);
-            Swal.fire({
-                title: "Updated",
-                text: "Your product has been updated",
-                icon: "success"
-            });
+            toast.success("Product updated successfull!")
             navigate(`/dashboard/products/${id}`);
         } catch (error) {
+            toast.error("Product updated Failed!")
             console.log("Error updating product:", error);
         }
     };
@@ -96,7 +99,7 @@ const EditProduct = () => {
                 </div>
                 <div>
                     <label className="block text-gray-600">Materails:</label>
-                    <input type="text" name="materail" value={product.materail} onChange={handleChange} className="w-full border rounded p-2"/>
+                    <input type="text" name="materail" value={product.material} onChange={handleChange} className="w-full border rounded p-2"/>
                 </div>
                 <div>
                     <label className="block text-gray-600">Collections:</label>

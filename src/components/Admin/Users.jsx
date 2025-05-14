@@ -7,6 +7,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
 import { MdBlock } from "react-icons/md";
 import { CgUnblock } from "react-icons/cg";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -20,7 +22,7 @@ const Users = () => {
     useEffect(() => {
         if (!user || user.role !== "admin") {
             navigate("/");
-            Swal.fire("Access Denied","You are not an admin","warning");
+            toast.warning("You are not an admin");
             return;
         }
         
@@ -28,10 +30,12 @@ const Users = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("token")
-                console.log("Token:", token);
-
                 const [usersRes, ordersRes] = await Promise.all([
-                    axios.get("http://localhost:5655/users"),
+                    axios.get("http://localhost:5655/users", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }),
                     axios.get(`http://localhost:5655/api/orders/allOrder`, {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -83,10 +87,10 @@ const Users = () => {
             try {
                 await axios.delete(`http://localhost:5655/users/${id}`);
                 setUsers((prev) => prev.filter((u) => u._id !== id));
-                Swal.fire("Deleted!", "User has been deleted.", "success");
+                toast.success("User has been deleted.");
             } catch (error) {
                 console.error("Delete error:", error);
-                Swal.fire("Error", "Could not delete user.", "error");
+                toast.error("Could not delete user.");
             }
         }
     };

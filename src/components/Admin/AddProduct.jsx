@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddProduct = () => {
 
@@ -38,14 +39,19 @@ const AddProduct = () => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+        const token = localStorage.getItem("token")
         axios
-            .post("http://localhost:5655/products",product)
+            .post("http://localhost:5655/products",product, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
             .then (() => {
-                Swal.fire("Success","Product Added Succesfull","success")
+                toast.success("Product Added Successfully!")
                 navigate('/dashboard/products')
             })
             .catch ((err) => {
+                toast.error("Error Adding Product");
                 console.log("Error Adding Product", err)
             })
         
@@ -130,6 +136,7 @@ const AddProduct = () => {
                     <button type="button" onClick={() => navigate(-1)} className="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
+            
         </div>
     )
 }

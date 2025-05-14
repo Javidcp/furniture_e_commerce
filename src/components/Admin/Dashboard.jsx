@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -29,8 +29,16 @@ const Dashboard = () => {
             try {
                 const token = localStorage.getItem("token")
                 const [usersRes, productsRes, orderRes] = await Promise.all([
-                    axios.get("http://localhost:5655/users"),
-                    axios.get("http://localhost:5655/products/all"),
+                    axios.get("http://localhost:5655/users", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }),
+                    axios.get("http://localhost:5655/products/all", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }),
                     axios.get("http://localhost:5655/api/orders/allOrder", {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -130,7 +138,6 @@ const Dashboard = () => {
                 <thead>
                     <tr className="bg-white">
                         <th className="p-2">Order ID</th>
-                        <th className="p-2">User</th>
                         <th className="p-2">Total</th>
                         <th className="p-2">Date</th>
                         <th className="p-2">Status</th>
@@ -142,7 +149,6 @@ const Dashboard = () => {
                             <td className="p-2">
                                 {order._id}
                             </td>
-                            <td className="p-2">{order.name}</td>
                             <td className="p-2">₹{order.totalAmount.toLocaleString("en-IN")}</td>
                             <td className="p-2">{new Date(order.createdAt).toLocaleDateString()}</td>
                             <td className={`p-2 font-semibold ${handleStatus(order.orderStatus)}`}>

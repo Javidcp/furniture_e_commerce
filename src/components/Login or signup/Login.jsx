@@ -2,11 +2,12 @@ import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import axios from 'axios';
 import { AuthContext } from '../Authentication/AuthContext';
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import api from '../Authentication/api';
 
-const API_BASE = "http://localhost:5655/api/auth";
+
 
 const Login = () => {
     const [name, setName] = useState("");
@@ -53,17 +54,13 @@ const Login = () => {
         }
 
         try {
-            await axios.post(`${API_BASE}/register`, { name, email, password });
+            await api.post(`/api/auth/register`, { name, email, password });
 
             setName("");
             setEmail("");
             setPassword("");
             setError("");
-            Swal.fire({
-                title: "Success",
-                text: "Sign up successful, please login!",
-                icon: "success"
-            });
+            toast.success("Sign up successful, please login!");
             setAction("Login");
         } catch (err) {
             if (err.response?.data?.message) {

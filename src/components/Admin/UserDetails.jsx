@@ -11,22 +11,34 @@ const UserDetails = () => {
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [orders, setOrders] = useState([]);
 
 
     
-    useEffect(() => {
-        axios
-            .get(`http://localhost:5655/users/${id}`)
-            .then((response) => {
-                const userData = response.data;
-                setUser(userData);
+useEffect(() => {
+    const token = localStorage.getItem("token")
+    axios.get(`http://localhost:5655/users/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((response) => setUser(response.data))
+        .catch((error) => console.log("Error Fetching User Details", error));
 
-                
-                const total = userData.purchaseHistory.reduce((acc, order) => acc + order.totalAmount, 0);
-                setTotalAmount(total);
-            })
-            .catch((error) => console.log("Error Fetching User Details", error));
-    }, [id]);
+    
+    axios.get(`http://localhost:5655/api/orders/user/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+        .then((response) => {
+        const userOrders = response.data.orders;
+        setOrders(userOrders);
+        
+        const total = userOrders.reduce((acc, order) => acc + order.totalAmount, 0);
+        setTotalAmount(total);
+        })
+        .catch((error) => console.log("Error Fetching Orders", error));
+}, [id]);
+
 
     if (!user) return <div>Loading...</div>;
 
@@ -60,17 +72,18 @@ const UserDetails = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {user.purchaseHistory.length > 0 ? (
-                                user.purchaseHistory.map((order, orderIndex) => (
-                                order.items.map((item, itemIndex) => (
-                                    <tr key={`${orderIndex}-${itemIndex}`} className="border-b border-gray-300 bg-white">
-                                    <td className="p-2">{order.orderId}</td>
-                                    <td className="text-center p-2">{item.name}</td>
-                                    <td className="text-center p-2">{item.quantity}</td>
-                                    <td className="text-center p-2">₹ {item.price.toLocaleString("en-IN")}</td>
-                                    </tr>
-                                ))
-                                ))
+                            {orders.length > 0 ? (
+                                orders.map((order, orderIndex) => (
+                                    order.items.map((item, itemIndex) => (
+                                        <tr key={`${orderIndex}-${itemIndex}`} className="border-b border-gray-300 bg-white">
+                                        <td className="p-2">{order._id}</td>
+                                        <td className="text-center p-2">{item.name}</td>
+                                        <td className="text-center p-2">{item.quantity}</td>
+                                        <td className="text-center p-2">₹ {item.price.toLocaleString("en-IN")}</td>
+                                        </tr>
+                                    ))
+                                    ))
+
                             ) : (
                                 <tr>
                                 <td className="p-2 text-center" colSpan={4}>

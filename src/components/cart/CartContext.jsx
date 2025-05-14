@@ -1,7 +1,9 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
-import Swal from "sweetalert2";
 import axios from "axios";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext();
@@ -54,11 +56,7 @@ export function CartProvider({ children }) {
 
     const addToCart = (product, quantity = 1) => {
         if (!user) {
-            Swal.fire({
-                title: "LogIn",
-                text: "You need to LogIn to add items to cart",
-                icon: "warning"
-            });
+            toast.info("You need to LogIn to add items to cart");
             return;
         }
 

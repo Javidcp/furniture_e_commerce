@@ -8,9 +8,11 @@ import Responsive from "../Navbar/Responsive";
 import { CartContext } from "../cart/CartContext";
 import { useWishlist } from '../wishlist/wishlistContext'
 import { AuthContext } from "../Authentication/AuthContext";
-import Swal from "sweetalert2";
 import SearchButton from "./SearchButton";
 import { GoHeart } from "react-icons/go";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 import "@fontsource/montserrat";
 
@@ -140,7 +142,7 @@ const Navbar = () => {
                         className="relative bg-white p-2 rounded-2xl"
                         onClick={() => {
                             if (!user) {
-                                Swal.fire("LogIn","You need to log in to access the cart","warning");
+                                toast.warning("You need to log in to access the cart");
                                 navigate("/login");
                             } else {
                                 navigate("/cart");

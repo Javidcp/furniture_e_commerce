@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import { useAuth } from '../components/Authentication/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const OrderSuccess = () => {
   const { orderId } = useParams();
@@ -15,7 +17,7 @@ const OrderSuccess = () => {
   useEffect(() => {
     const confirmOrder = async () => {
       if (!token) {
-        Swal.fire("Error", "Authentication required. Please log in.", "error");
+        toast.error("Authentication required. Please log in.");
         setIsLoading(false);
         return;
       }
@@ -49,7 +51,7 @@ const OrderSuccess = () => {
           }
         }
         
-        Swal.fire("Error", errorMessage, "error");
+        toast.error(errorMessage);
       } finally {
         setIsLoading(false);
       }

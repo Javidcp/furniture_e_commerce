@@ -15,7 +15,12 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:5655/products/${id}`);
+                const token = localStorage.getItem("token")
+                const response = await axios.get(`http://localhost:5655/products/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setProduct(response.data);
             } catch (err) {
                 setError("Product not found");
@@ -83,7 +88,7 @@ const ProductDetails = () => {
                     </p>
                     <p className="text-gray-600 mb-2 relative border-b p-2 border-gray-400">
                         <strong>Materail:</strong> 
-                        <span className="absolute right-0">{product.materail}</span>
+                        <span className="absolute right-0">{product.material}</span>
                     </p>
                     <p className="text-gray-600 mb-2 relative border-b p-2 border-gray-400">
                         <strong>Collection:</strong> 
