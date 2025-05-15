@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import sofa  from '../../assets/sofa.jpg';
 import { Link } from "react-router-dom";
 import { useWishlist } from "../../components/wishlist/wishlistContext";
 import { GoHeart, GoHeartFill  } from "react-icons/go";
+import api from "../../components/Authentication/api";
 
 
-const API_BED = "http://localhost:5655/products"
 
 const Sofa = () => {
 
@@ -21,7 +20,7 @@ const Sofa = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${API_BED}?category=sofa`);
+        const response = await api.get(`/products?category=sofa`);
         setProducts(response.data);
       } catch (err) {
         console.error("Error fetching products", err);

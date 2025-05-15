@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import api from "../Authentication/api";
 
 const SearchButton = () => {
     const [products, setProducts] = useState([]);
@@ -11,7 +11,7 @@ const SearchButton = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get("http://localhost:5655/products/all");
+                const response = await api.get("/products/all");
                 setProducts(response.data);
                 setFilteredProducts(response.data);
             } catch (error) {

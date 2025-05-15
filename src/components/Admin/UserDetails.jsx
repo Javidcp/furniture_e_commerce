@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TiTick } from "react-icons/ti";
 import { MdBlock } from "react-icons/md";
+import api from "../Authentication/api";
 
 
 
@@ -16,19 +16,12 @@ const UserDetails = () => {
 
     
 useEffect(() => {
-    const token = localStorage.getItem("token")
-    axios.get(`http://localhost:5655/users/${id}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
+    api.get(`/users/${id}`)
         .then((response) => setUser(response.data))
         .catch((error) => console.log("Error Fetching User Details", error));
 
     
-    axios.get(`http://localhost:5655/api/orders/user/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-    })
+    api.get(`/api/orders/user/${id}`)
         .then((response) => {
         const userOrders = response.data.orders;
         setOrders(userOrders);

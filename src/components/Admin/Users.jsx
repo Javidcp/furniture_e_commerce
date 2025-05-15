@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
 import { FaRegEye } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import Swal from "sweetalert2";
@@ -9,6 +8,7 @@ import { MdBlock } from "react-icons/md";
 import { CgUnblock } from "react-icons/cg";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "../Authentication/api";
 
 
 
@@ -29,18 +29,9 @@ const Users = () => {
 
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem("token")
                 const [usersRes, ordersRes] = await Promise.all([
-                    axios.get("http://localhost:5655/users", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }),
-                    axios.get(`http://localhost:5655/api/orders/allOrder`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    })
+                    api.get("/users"),
+                    api.get(`/api/orders/allOrder`)
                 ]);
 
                 console.log(usersRes);
@@ -85,7 +76,7 @@ const Users = () => {
     
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:5655/users/${id}`);
+                await api.delete(`/users/${id}`);
                 setUsers((prev) => prev.filter((u) => u._id !== id));
                 toast.success("User has been deleted.");
             } catch (error) {
@@ -97,7 +88,7 @@ const Users = () => {
 
     const toggleBlockUser = async (id, currentStatus) => {
         try {
-            const response = await axios.patch(`http://localhost:5655/users/${id}`, {
+            const response = await api.patch(`/users/${id}`, {
                 blocked: !currentStatus,
             });
 

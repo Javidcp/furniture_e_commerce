@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import api from "../Authentication/api";
 
 
 const Order = () => {
@@ -13,13 +13,7 @@ const Order = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const token = localStorage.getItem("token");
-
-                const response = await axios.get("http://localhost:5655/api/orders/allOrder", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const response = await api.get("/api/orders/allOrder");
                 const allOrders = response.data.orders.map(order => ({
                     ...order,
                     customerName: order.userId?.name || "Unknown",
@@ -47,14 +41,11 @@ const Order = () => {
         const handleStatusChange = async (orderId, userId, newStatus) => {
 
             try {
-                const token = localStorage.getItem("token");
-
-                await axios.put(`http://localhost:5655/api/orders/update-status/${orderId}`,
+                await api.put(`/api/orders/update-status/${orderId}`,
                     { orderStatus: newStatus},
                     {
                         headers: {
                             'Content-Type': 'application/json',
-                            Authorization: `Bearer ${token}`,
                         }
                     }
                 );

@@ -1,10 +1,10 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/Authentication/AuthContext";
-import axios from "axios";
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "./Authentication/api";
 
 
 
@@ -22,11 +22,7 @@ const OrderHistory = () => {
         }
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:5655/api/orders/user/${userId}`, {
-                    headers : {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const response = await api.get(`/api/orders/user/${userId}`);
 
                 const sortedOrder = (response.data.orders || []).sort(
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -68,11 +64,7 @@ const OrderHistory = () => {
             })
             if (result.isConfirmed) {
                 try {
-                    await axios.patch(`http://localhost:5655/api/orders/${_id}/cancel`, {}, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
+                    await api.patch(`/api/orders/${_id}/cancel`, {});
                     
                     const updatedOrders = orders.map((order) =>
                         order._id === _id ? { ...order, orderStatus: "cancelled" } : order

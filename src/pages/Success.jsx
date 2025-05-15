@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../components/Authentication/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from '../components/Authentication/api';
 
 
 const OrderSuccess = () => {
@@ -23,12 +23,11 @@ const OrderSuccess = () => {
       }
 
       try {
-        const response = await axios.patch(
-          `http://localhost:5655/api/orders/${orderId}/payment-status`,
+        const response = await api.patch(
+          `/api/orders/${orderId}/payment-status`,
           { paymentStatus: 'paid' },
           { 
             headers: { 
-              Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json'
             } 
           }

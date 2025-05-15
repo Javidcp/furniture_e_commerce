@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import api from "../Authentication/api";
 
 const OrderDetails = () => {
     const { orderId } = useParams();
@@ -12,13 +12,7 @@ const OrderDetails = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const token = localStorage.getItem("token")
-
-                const res = await axios.get(`http://localhost:5655/api/orders/${orderId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
+                const res = await api.get(`/api/orders/${orderId}`)
                 setOrder(res.data);
             } catch (error) {
                 console.log("Error Fetching Order Details", error);

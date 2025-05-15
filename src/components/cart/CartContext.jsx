@@ -1,13 +1,15 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
-import axios from "axios";
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "../Authentication/api";
 
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export function CartProvider({ children }) {
     const { user } = useContext(AuthContext);
     const [cart, setCart] = useState([]);
@@ -15,12 +17,7 @@ export function CartProvider({ children }) {
 
     useEffect(() => {
         if (user) {
-            const token = localStorage.getItem("token")
-            axios.get(`http://localhost:5655/api/user/cart/${user._id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-                })
+            api.get(`/api/user/cart/${user._id}`)
                 .then((response) => {
                     setCart(response.data.cart);
                 })
@@ -43,7 +40,7 @@ export function CartProvider({ children }) {
                 quantity: item.quantity
             }));
     
-            axios.put(`http://localhost:5655/api/user/cart/${user._id}`, { cart: minimalCart })
+            api.put(`/api/user/cart/${user._id}`, { cart: minimalCart })
                 .then((response) => {
                     console.log("Cart updated successfully:", response.data);
                 })
@@ -74,7 +71,7 @@ export function CartProvider({ children }) {
 
     const removeFromCart = (productId) => {
         setCart((prevCart) => prevCart.filter((item) => item._id !== productId));
-        axios.post(`http://localhost:5655/api/user/remove-from-cart`, {
+        api.post(`/api/user/remove-from-cart`, {
             email: user.email,
             productId
         })

@@ -1,15 +1,16 @@
-import axios from 'axios';
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import api from '../Authentication/api';
 
 const WishlistContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const WishlistProvider = ({ children, userEmail }) => {
     const [wishlist, setWishlist] = useState([]);
 
     const fetchWishlist = useCallback(async () => {
         if (!userEmail) return;
         try {
-            const res = await axios.get(`http://localhost:5655/users/wishlist/${userEmail}`);
+            const res = await api.get(`/users/wishlist/${userEmail}`);
             setWishlist(res.data);
         } catch (err) {
             console.error("Fetch wishlist error", err);
@@ -35,7 +36,7 @@ export const WishlistProvider = ({ children, userEmail }) => {
         }
 
         try { 
-            await axios.post("http://localhost:5655/users/wishlist", { email: userEmail, wishlist: [item] });
+            await api.post("/users/wishlist", { email: userEmail, wishlist: [item] });
             await fetchWishlist()
         } catch (err) {
             console.error("Add to wishlist error:", err);
@@ -44,8 +45,8 @@ export const WishlistProvider = ({ children, userEmail }) => {
 
     const removeFromWishlist = async (productId) => {
         try {
-            const res = await axios.put(
-                "http://localhost:5655/users/wishlist/remove",
+            const res = await api.put(
+                "/users/wishlist/remove",
                 { 
                     email: userEmail, 
                     productId: String(productId) 

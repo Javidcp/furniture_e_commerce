@@ -1,8 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../Authentication/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import Swal from "sweetalert2";
+import api from "../Authentication/api";
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -27,23 +28,10 @@ const Dashboard = () => {
 
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem("token")
                 const [usersRes, productsRes, orderRes] = await Promise.all([
-                    axios.get("http://localhost:5655/users", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }),
-                    axios.get("http://localhost:5655/products/all", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }),
-                    axios.get("http://localhost:5655/api/orders/allOrder", {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }),
+                    api.get("/users"),
+                    api.get("/products/all"),
+                    api.get("/api/orders/allOrder"),
                 ]);
 
                 setUsers(usersRes.data);

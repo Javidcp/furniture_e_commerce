@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "../Authentication/api";
 
 const EditProduct = () => {
     const { id } = useParams();
@@ -35,12 +35,7 @@ const EditProduct = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const token = localStorage.getItem("token")
-                const response = await axios.get(`http://localhost:5655/products/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await api.get(`/products/${id}`);
                 setProduct(response.data);
             } catch (error) {
                 console.log("Error fetching product:", error);
@@ -58,7 +53,7 @@ const EditProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.put(`http://localhost:5655/products/${id}`, product);
+            await api.put(`/products/${id}`, product);
             toast.success("Product updated successfull!")
             navigate(`/dashboard/products/${id}`);
         } catch (error) {

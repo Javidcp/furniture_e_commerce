@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { GoHeart, GoHeartFill  } from "react-icons/go";
 import { useWishlist } from './wishlist/wishlistContext';
+import api from './Authentication/api';
 
 function ProductList({ categoryName, numProducts = 4,  }) {
   const [products, setProducts] = useState([]);
@@ -18,7 +18,7 @@ function ProductList({ categoryName, numProducts = 4,  }) {
     
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:5655/products?category=${categoryName}`);
+        const response = await api.get(`/products?category=${categoryName}`);
         setProducts(response.data.slice(0, numProducts));
       } catch (err) {
         setError(err);

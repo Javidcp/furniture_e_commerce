@@ -1,24 +1,23 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../components/Authentication/useAuth';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from '../components/Authentication/api';
 
 
 
 const OrderFailed = () => {
     const { orderId } = useParams();
-    const { user } = useAuth()
+
   
 
   useEffect(() => {
     const markAsFailed = async () => {
       try {
-        await axios.patch(
-          `http://localhost:5655/api/orders/${orderId}/payment-status`,
+        await api.patch(
+          `/api/orders/${orderId}/payment-status`,
           { paymentStatus: 'failed' },
-          { headers: { Authorization: `Bearer ${user.token}` } }
+
         );
         toast.error("Your payment was not successful");
       } catch (error) {

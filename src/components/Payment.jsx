@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../components/cart/CartContext";
 import { AuthContext } from "../components/Authentication/AuthContext";   
 import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "./Authentication/api";
 
 
 const Payment = () => {
@@ -81,12 +81,11 @@ const Payment = () => {
                 paymentStatus: null
             };
 
-            const response = await axios.post(
-                `http://localhost:5655/api/orders`, 
+            const response = await api.post(
+                `/api/orders`, 
                 orderData,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
                 }
@@ -120,14 +119,13 @@ const Payment = () => {
             if (method === "Stripe") {
                 const stripe = await loadStripe(import.meta.env.STRIPE_PUBLISHABLE);
                 
-                const response = await axios.post(
-                    `http://localhost:5655/api/payment/create-checkout-session`,
+                const response = await api.post(
+                    `/api/payment/create-checkout-session`,
                     { 
                         products: cart, 
                         orderId: order._id,
                         customerEmail: user.email 
-                    },
-                    { headers: { Authorization: `Bearer ${token}` } }
+                    }
                 );
 
                 const result = await stripe.redirectToCheckout({

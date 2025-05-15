@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext, useCallback } from "react";
-import axios from "axios";
 import { IoCartOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { RiArrowDropDownLine, RiArrowDropUpLine } from "react-icons/ri";
@@ -10,6 +9,7 @@ import installation from '../assets/installation.svg'
 import { CartContext } from "./cart/CartContext";
 import { useWishlist } from "./wishlist/wishlistContext";
 import { GoHeart, GoHeartFill  } from "react-icons/go";
+import api from "./Authentication/api";
 
 function ProductDetail() {
     const { id } = useParams(); 
@@ -36,11 +36,10 @@ function ProductDetail() {
 
 
 
-    const API = `http://localhost:5655`; 
 
     const fetchProducts = useCallback(async () => {
         try {
-            const response = await axios.get(`${API}/products/${id}`)
+            const response = await api.get(`/products/${id}`)
             setProduct(response.data)
             return response.data.category;
         } catch (err) {
@@ -57,7 +56,7 @@ function ProductDetail() {
     
         const fetchRelatedProducts = useCallback(async (category) => {
             try {
-                const response = await axios.get(`${API}/products?category=${category}`);
+                const response = await api.get(`/products?category=${category}`);
                 const filteredProducts = response.data.filter((p) => p._id !== id).slice(0, 4);
                 setRelatedProducts(filteredProducts);
             } catch (err) {

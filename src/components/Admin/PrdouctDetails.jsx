@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { FaArrowRight } from "react-icons/fa6";
 import { MdOutlineModeEdit } from "react-icons/md";
+import api from "../Authentication/api";
 
 
 
@@ -15,12 +15,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             try {
-                const token = localStorage.getItem("token")
-                const response = await axios.get(`http://localhost:5655/products/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await api.get(`/products/${id}`);
                 setProduct(response.data);
             } catch (err) {
                 setError("Product not found");

@@ -1,10 +1,10 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { MdDeleteOutline, MdDelete  } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import api from "../Authentication/api";
 
 
 const Products = () => {
@@ -15,12 +15,7 @@ const Products = () => {
 
     const fetchProduct = async () => {
         try {
-            const token = localStorage.getItem("token")
-            const response = await axios.get("http://localhost:5655/products/all", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await api.get("/products/all");
             setProducts(response.data)
             setFilteredProduct(response.data)
             extractCategory(response.data)
@@ -54,12 +49,7 @@ const Products = () => {
     const handleDelete = async (_id) => {
         
             try {
-                const token = localStorage.getItem("token")
-                const response = await axios.patch(`http://localhost:5655/products/${_id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+                const response = await api.patch(`/products/${_id}`);
                 const updatedProduct = response.data.product;
                 const updatedProducts = products.map((product) =>
                     product._id === _id ? updatedProduct : product

@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import api from "../Authentication/api";
 
 const AddProduct = () => {
 
@@ -38,14 +38,9 @@ const AddProduct = () => {
         }))
     }
     const handleSubmit = (e) => {
-        e.preventDefault();
-        const token = localStorage.getItem("token")
-        axios
-            .post("http://localhost:5655/products",product, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
+        e.preventDefault()
+
+        api.post("/products",product,)
             .then (() => {
                 toast.success("Product Added Successfully!")
                 navigate('/dashboard/products')
