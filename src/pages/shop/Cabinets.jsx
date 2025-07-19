@@ -2,7 +2,7 @@
 
 const Cabinets = () => {
     return (
-        <div className="my-30 text-center text-xl font-medium">Cabinets</div>
+        <div className="my-30 text-center text-xl font-medium">Cabinet</div>
     )
 }
 

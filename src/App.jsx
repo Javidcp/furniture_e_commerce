@@ -62,7 +62,6 @@ const router = createHashRouter([
     { path: '/contact', element: <Contact /> },
     { path: '/category/:category/product/:id', element: <ProductDetail /> },
     { path: '/search', element: <SearchButton />},
-    
   ]},
   { path: '/success/:orderId', element: <Success />},
   { path: '/failed', element: <Failed />},
